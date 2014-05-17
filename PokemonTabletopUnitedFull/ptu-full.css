@@ -32,33 +32,37 @@
 
 .sheet-header{
  color: white;
- background: black;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
  text-align: center;
 }
 
 .sheet-table-header{
  font-weight: bold;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
 }
 
 .sheet-banded{
- background: #E5E5E5;   
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);  
 }
 
 .sheet-table{
  width: 100%;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
 }
 
 .sheet-main-header{
  width:100%;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
 }
 
 .sheet-center-img{
  margin: 0 auto;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
 }
 
 .sheet-minihead{
  color: white;
- background: gray;
+ background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
  text-align: center;
 }
 
@@ -66,6 +70,7 @@
     resize: none;
     border: none;
     width: 100%;
+    background-image: url(http://www.warpedfactor.com/2014/01/by-power-of-greyskull-new-he-man-film.html);
     -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
        -moz-box-sizing: border-box; /* FF1+ */
             box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
