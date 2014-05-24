@@ -7,8 +7,8 @@
         <tr class='sheet-banded'>
             <td class='sheet-table-header'><h4>Type of Character:</h4></td>
             <td>
-                <input type='radio' name='attr_CharType' value='1' checked='true'>Trainer</input>
-                <input type='radio' name='attr_CharType' value='0'>Pokemon</input>
+                <input type='radio' name='attr_CharType' value='1'>Trainer</input>
+                <input type='radio' name='attr_CharType' value='0' checked='true'>Pokemon</input>
             </td>
         </tr>
     </table>
@@ -27,12 +27,56 @@
                 <td><input class='sheet-shortfield' name='attr_species' type='text'/></td>
             </tr>
             <tr class='sheet-banded'>
-                <td class='sheet-table-header'>Type1:</td>
-                <td><input class='sheet-shortfield' name='attr_type1' type='text' /></td>
+                <td class='sheet-table-header'>Type 1:</td>
+                <td>
+                    <select class='sheet-shortfield' name='attr_type1' >
+                        <option value="normal">Normal</option>
+                        <option value="fire">Fire</option>
+                        <option value="water">Water</option>
+                        <option value="electric">Electric</option>
+                        <option value="grass">Grass</option>
+                        <option value="ice">Ice</option>
+                        <option value="fighting">Fighting</option>
+                        <option value="poison">Poison</option>
+                        <option value="ground">Ground</option>
+                        <option value="flying">Flying</option>
+                        <option value="psychic">Psychic</option>
+                        <option value="bug">Bug</option>
+                        <option value="rock">Rock</option>
+                        <option value="ghost">Ghost</option>
+                        <option value="dragon">Dragon</option>
+                        <option value="dark">Dark</option>
+                        <option value="steel">Steel</option>
+                        <option value="fairy">Fairy</option>
+                        <option value="none">None</option>
+                    </select>
+                </td>
             </tr>
             <tr>
-                <td class='sheet-table-header'>Type2:</td>
-                <td><input class='sheet-shortfield' name='attr_type2' type='text' /></td>
+                <td class='sheet-table-header'>Type 2:</td>
+                <td>
+                    <select class='sheet-shortfield' name='attr_type2' >
+                        <option value="normal">Normal</option>
+                        <option value="fire">Fire</option>
+                        <option value="water">Water</option>
+                        <option value="electric">Electric</option>
+                        <option value="grass">Grass</option>
+                        <option value="ice">Ice</option>
+                        <option value="fighting">Fighting</option>
+                        <option value="poison">Poison</option>
+                        <option value="ground">Ground</option>
+                        <option value="flying">Flying</option>
+                        <option value="psychic">Psychic</option>
+                        <option value="bug">Bug</option>
+                        <option value="rock">Rock</option>
+                        <option value="ghost">Ghost</option>
+                        <option value="dragon">Dragon</option>
+                        <option value="dark">Dark</option>
+                        <option value="steel">Steel</option>
+                        <option value="fairy">Fairy</option>
+                        <option value="none">None</option>
+                    </select>
+                </td>
             </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>Level:</td>
@@ -48,7 +92,11 @@
             </tr>
             <tr>
                 <td class='sheet-table-header'>Gender:</td>
-                <td><input class='sheet-shortfield' name='attr_Gender' type='text'/></td>
+                <td>
+                    <input name='attr_Gender' type='radio' value='Male'>Male</input>
+                    <input name='attr_Gender' type='radio' value='Female'>Female</input>
+                    <input name='attr_Gender' type='radio' value='Genderless' checked='true'>Genderless</input>
+                </td>
             </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>Nature:</td>
@@ -57,10 +105,14 @@
             <tr>
                 <td class='sheet-table-header'>Height/Size:</td>
                 <td><input class='sheet-shortfield'  name='attr_Height'type='text'/></td>
-            </tr class='sheet-banded'>
+            </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>Weight Class:</td>
                 <td><input type='number' name='attr_WeightClass' value='1' /></td>
+            </tr>
+            <tr>
+                <td class='sheet-table-header'>Age:</td>
+                <td><input class='sheet-shortfield'  name='attr_Age'type='number'/></td>
             </tr>
         </table>
         <br />
@@ -263,7 +315,7 @@
             </tr>
         </table>
         <br />
-        <h3 class="sheet-header">Evasions</h3>
+        <h3 class="sheet-header">Accuracy and Evasion</h3>
             <table class='sheet-table'>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>Physical Evade:</td>
@@ -276,6 +328,26 @@
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>Speed Evade:</td>
                     <td><input type='number' name='attr_SpeedEvade' disabled='true' value="floor(@{SPEED_Total}/5)"/> (MAX 6)</td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header'>Accuracy Combat Stage:</td>
+                    <td align='center'>
+                        <select class='sheet-shortfield2' name='attr_Accuracy'>
+                            <option value='-6'>-6</option>
+                            <option value='-5'>-5</option>
+                            <option value='-4'>-4</option>
+                            <option value='-3'>-3</option>
+                            <option value='-2'>-2</option>
+                            <option value='-1'>-1</option>
+                            <option value='0' selected>0</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                        </select>
+                    </td>   
                 </tr>
             </table>
         <br />
@@ -603,7 +675,11 @@
             </tr>
             <tr>
                 <td class='sheet-table-header'>Damage Type:</td>
-                <td><input class='sheet-shortfield' type='text' name="attr_Struggle_DType"/></td>
+                <td>
+                    <input  type='radio' name="attr_Struggle_DType" value="Physical">Physical</input>
+                    <input  type='radio' name="attr_Struggle_DType" value="Special">Special</input>
+                    <input  type='radio' name="attr_Struggle_DType" value="Status">Status</input>
+                </td>
             </tr>
             <tr class='sheet-banded'>
                <td class='sheet-table-header'>Damage Rolls:</td> 
@@ -641,28 +717,72 @@
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Type:</td>
-                    <td><input class='sheet-shortfield' type='text' name="attr_Move_Type"/></td>
+                    <td>
+                        <select class='sheet-shortfield' name="attr_Move_DType">
+                            <option value="normal">Normal</option>
+                            <option value="fire">Fire</option>
+                            <option value="water">Water</option>
+                            <option value="electric">Electric</option>
+                            <option value="grass">Grass</option>
+                            <option value="ice">Ice</option>
+                            <option value="fighting">Fighting</option>
+                            <option value="poison">Poison</option>
+                            <option value="ground">Ground</option>
+                            <option value="flying">Flying</option>
+                            <option value="psychic">Psychic</option>
+                            <option value="bug">Bug</option>
+                            <option value="rock">Rock</option>
+                            <option value="ghost">Ghost</option>
+                            <option value="dragon">Dragon</option>
+                            <option value="dark">Dark</option>
+                            <option value="steel">Steel</option>
+                            <option value="fairy">Fairy</option>
+                            <option value="none">None</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Damage:</td>
-                    <td><input type='number' name='attr_Move_Amount'/><select class='sheet-shortfield2' name="attr_Move_Dice" class="dtype">                
-                          <option value="d6">d6</option>
-                          <option value="d8">d8</option>
-                          <option value="d10">d10</option>
-                          <option value="d12">d12</option>
-                        </select>+<input class='sheet-shortfield' type='number' name='attr_Move_Bonus'/>
-                        
+                    <td class='sheet-table-header'>Damage Base</td>
+                    <td>
+                        <input type='number' name='attr_Move_Damage_Base' />
                     </td>
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Damage Type:</td>
-                    <td><input class='sheet-shortfield' type='text' name="attr_Move_DType"/></td>
+                    <td>
+                        <input  type='radio' name="attr_Move_Type" value="physical">Physical</input>
+                        <input  type='radio' name="attr_Move_Type" value="special">Special</input>
+                        <input  type='radio' name="attr_Move_Type" value="status">Status</input>
+                    </td>
                 </tr>
                 <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>Accuracy Modifier</td>
+                    <td>
+                        <input type='number' name='attr_Move_AccuracyBonus' value='0' />
+                    </td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header'>Crit Range ExtensioN</td>
+                    <td>
+                        <input class='screen-floatL' type='number' name='attr_Move_CritBase' value='0'/>
+                        <div class='sheet-tooltip-icon' title='Increase the number of potential rolls in the critical hit range. 0 corresponds to only natural 20s critting, while 1 corresponds to a range of 19-20'>?</div>
+                        <div class='screen-clear'></div>
+                    </td>
+                </tr>
+                <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>Multi-Hit:</td>
+                    <td>
+                        <input  type='radio' name="attr_Move_MultiHit" value="1" checked='true'>Normal</input>
+                        <input  type='radio' name="attr_Move_MultiHit" value="2">Double Strike</input>
+                        <input  type='radio' name="attr_Move_MultiHit" value="5">Five Strike</input>
+                    </td>
+                </tr>           
+                <tr>
                    <td class='sheet-table-header'>Damage Rolls:</td> 
                    <td>
-                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{ATK_total} Damage from @{Move_Name}, Physical' name='roll_MoveAtkPhys' />Physical
-                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />Special
+                    <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />NEW ATTACK
+                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{ATK_total} Damage from @{Move_Name}, Physical' name='roll_MoveAtkPhys' />O-Physical
+                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />O-Special
                    </td>
                 </tr>
                 <tr>
@@ -720,7 +840,7 @@
     <table class='sheet-table'>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Cash</td>
-            <td><input type='number' name='attr_Cash' class='sheet-shortfield3'/></td>
+            <td><input type='text' name='attr_Cash' class='sheet-shortfield3'/></td>
         </tr>
     </table>
     <br />
@@ -740,4 +860,47 @@
             </tr>
         </table>
     </fieldset>
+</div>
+<div class='sheet-row'>
+    <h3 class="sheet-header">Roll Modifiers</h3>
+</div>
+<div class='sheet-2colrow'>
+    <div class='sheet-col'>
+        <h4 class="sheet-minihead-bkg">
+            <div class="sheet-tooltip-icon" title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
+            <div class='sheet-minihead-floatL'>Permenant</div>
+            <div class='sheet-clear' />
+        </h4>
+        <table class='sheet-table'>
+            <tr class="sheet-banded  sheet-main-header">
+                <td class='sheet-table-header'>
+                    <div class="sheet-tooltip-icon" title='Fixed bonus to accuracy rolls'>?</div>
+                    <div class='sheet-floatL'>Accuracy Modifier:</div>
+                    <div class='sheet-clear' />
+                </td>
+                <td>
+                    <input class='sheet-shortfield' name='attr_Mod_Perm_Accuracy' type='number' value='0' />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class='sheet-col'>
+        <h4 class="sheet-minihead-bkg">
+            <div class="sheet-tooltip-icon" title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+            <div class='sheet-minihead-floatL'>Temporary</div>
+            <div class='sheet-clear' />
+        </h4>
+        <table class='sheet-table'>
+            <tr class="sheet-banded">
+                <td class='sheet-table-header'>
+                    <div class="sheet-tooltip-icon" title='Fixed bonus to accuracy rolls'>?</div>
+                    <div class='sheet-floatL'>Accuracy Modifier:</div>
+                    <div class='sheet-clear' />
+                </td>
+                <td>
+                    <input class='sheet-shortfield' name='attr_Mod_Temp_Accuracy' type='number' value='0' />
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>

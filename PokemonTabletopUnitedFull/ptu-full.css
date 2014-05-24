@@ -36,6 +36,12 @@
  text-align: center;
 }
 
+.sheet-subheader{
+ color: grey;
+ background: white;
+ text-align: center;
+}
+
 .sheet-table-header{
  font-weight: bold;
 }
@@ -56,10 +62,14 @@
  margin: 0 auto;
 }
 
-.sheet-minihead{
+.sheet-minihead-floatL{
  color: white;
- background: gray;
  text-align: center;
+ font-weight: normal;
+}
+
+.sheet-minihead-bkg{
+   background: gray;
 }
 
 .sheet-textarea{
@@ -79,4 +89,27 @@
     -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
        -moz-box-sizing: border-box; /* FF1+ */
             box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+}
+
+.sheet-tooltip-icon{
+  width:24px;
+  height:24px;
+  border-radius:12px;
+  font-size:18px;
+  font-weight: bold;
+  color: white;
+  line-height:24px;
+  text-align:center;
+  background: blue;
+  float: left;
+  margin-right: 12px;
+}
+
+.sheet-floatL{
+  float: left;
+}
+
+
+.sheet-clear{
+  clear: both;
 }
