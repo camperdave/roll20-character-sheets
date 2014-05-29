@@ -27,7 +27,8 @@ var PTU_damageBaseTable = [
 	"6d12+60",
 	"7d12+65",
 	"8d12+70",
-	"8d12+80" ];
+	"8d12+80"
+];
 
 /* PTU_Type_Effectiveness["offensive_type"]["defensive_type"] = Multiplyer */
 var PTU_Type_Effectiveness = {
@@ -465,9 +466,21 @@ function PTU_Get_Attr(characterID, attrName) {
 		oAttr = oAttr[0];
 	}
 
-	log("PTU-GA [" + attrName + "]: " + JSON.stringify(oAttr));
+	log("PTU-GA " + characterID + "[" + attrName + "]: " + JSON.stringify(oAttr));
 
 	return oAttr;
+}
+
+function PTU_Get_Attr_Val(characterID, attrName) {
+	return PTU_Get_Attr(characterID, attrName).get('current');
+}
+
+function PTU_Get_Attr_Val_I(characterID, attrName) {
+	return parseInt(PTU_Get_Attr_Val(characterID, attrName));
+}
+
+function PTU_Get_Attr_Val_F(characterID, attrName) {
+	return parseFloat(PTU_Get_Attr_Val(characterID, attrName));
 }
 
 function PTU_Get_Move(attackerID, moveName) {
@@ -498,14 +511,16 @@ function PTU_Get_Move(attackerID, moveName) {
 
 			log("sPrefix: " + sPrefix);
 
-			log("M_T: " + PTU_Get_Attr(attackerID,sPrefix+"_Move_MultiHit").get('current'));
-
 			oMove.moveName = moveName;
-			oMove.AC = PTU_Get_Attr(attackerID, sPrefix+"_Move_AC").get('current');
-			oMove.attackType = PTU_Get_Attr(attackerID, sPrefix+"_Move_Type").get('current');
-			oMove.damageType = PTU_Get_Attr(attackerID, sPrefix+"_Move_DType").get('current');
-			oMove.accuracyBonus = PTU_Get_Attr(attackerID, sPrefix+"_Move_AccuracyBonus").get('current');
-			oMove.multiHit = PTU_Get_Attr(attackerID,sPrefix+"_Move_MultiHit").get('current');
+			oMove.AC = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_AC");
+			oMove.attackType = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_Type");
+			oMove.damageType = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_DType");
+			oMove.accuracyBonus = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy_Mod_Temp");
+			oMove.multiHit = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_MultiHit");
+			oMove.damageBase = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base_Mod_Temp");
+			oMove.critRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Temp"));
+			oMove.effectRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Temp"));
+			oMove.effectText = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_Effects");
 			log("PTU-GM (early) oMove: " + JSON.stringify(oMove));
 		}
 	}
@@ -521,24 +536,22 @@ function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 
 
 
-	var attackerAccuracyAttr = PTU_Get_Attr(attackerID,"Accuracy").current;
+	var attackerAccuracyAttr = PTU_Get_Attr_Val_I(attackerID,"Accuracy");
 
-	var attackerAccuracyModPerm = PTU_Get_Attr(attackerID,"Mod_Perm_Accuracy").current;
+	var attackerAccuracyModPerm = PTU_Get_Attr_Val_I(attackerID,"Mod_Perm_Accuracy");
 
-	var attackerAccuracyModTemp = PTU_Get_Attr(attackerID,"Mod_Temp_Accuracy").current;
+	var attackerAccuracyModTemp = PTU_Get_Attr_Val_I(attackerID,"Mod_Temp_Accuracy");
 
 	var attackerAccuracyRollBonus =  attackerAccuracyModPerm + attackerAccuracyModTemp;
 
-	var attack = PTU_Get_Move(attackerID, moveName);
+	var move = PTU_Get_Move(attackerID, moveName);
 
-	var attackerAccuracy = attackerAccuracyAttr + attack.accuracyBonus + attackerAccuracyRollBonus;
+	var attackerAccuracy = attackerAccuracyAttr + move.accuracyBonus + attackerAccuracyRollBonus;
 
 	var attackRolls = {
 		bonus: attackerAccuracy,
-		ac: attack.AC,
-		evades: [],
-		attackName: attack.moveName,
-		attackMultiHit: attack.multiHit,
+		attack: move,
+		evades: {},
 	};
 
 	log("PTU-CAR attackRolls: " + JSON.stringify(attackRolls));
@@ -551,28 +564,28 @@ function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 		
 		var evadePhys;
 		var evadeSpec;
-		var evadeSpeed = Math.max(PTU_Get_Attr(defenderIDs[i], "SpeedEvade").current, 6);
+		var evadeSpeed = PTU_Get_Attr_Val_I(defenderIDs[i], "SpeedEvade");
 
 		var evade;
 
-		if(attack.attackType == "physical") {
+		if(move.attackType == "physical") {
 			log("PTU-CAR: checking physical evasion for " + defenderIDs[i]);
-			evadePhys = Math.max(PTU_Get_Attr(defenderIDs[i], "PhysEvade").current, 6);
+			evadePhys = PTU_Get_Attr_Val_I(defenderIDs[i], "PhysEvade");
 			evade = Math.max(evadePhys, evadeSpeed);
 			
 		}
-		else if(attack.attackType == "special") {
+		else if(move.attackType == "special") {
 			log("PTU-CAR: checking special evasion for " + defenderIDs[i]);
-			evadeSpec = Math.max(PTU_Get_Attr(defenderIDs[i], "SpecEvade").current, 6);
+			evadeSpec = PTU_Get_Attr_Val_I(defenderIDs[i], "SpecEvade");
 			evade = Math.max(evadeSpec, evadeSpeed);
 		}
 		else {
 			log("PTU-CAR: skipping for status move: " + defenderIDs[i]);
-			attackRolls[i] = undefined;
+			attackRolls.evades[defenderIDs[i]] = undefined;
 			continue; //Skip this monster. Possibly add a nag screen for the player?
 		}
-
-		attackRolls.evades[i] = evade;
+		log("PTU-CAR~ evade: " + evade);
+		attackRolls.evades[defenderIDs[i]] = evade;
 
 		
 	}
@@ -580,6 +593,69 @@ function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 
 
 }
+
+function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) {
+	log("PTU-ChAR rollResult: " + JSON.stringify(rollResult));
+	log("PTU-ChAR attackRolls: " + JSON.stringify(attackRolls));
+	log("PTU-ChAR defenderID: " + defenderID);
+
+	var rr = JSON.parse(rollResult.content);
+	log("PTU-ChAR rolls content: " + JSON.stringify(rr));		// lol
+	log("PTU-ChAR rolls content.rolls: " + JSON.stringify(rr.rolls));
+
+	var attackResult = {
+		attackerID: attackerID,
+		defenderID: defenderID,
+		multiHit: attackRolls.attack.multiHit,
+	};
+
+	var damageBase = attackRolls.attack.damageBase;
+
+	var goal = attackRolls.attack.AC + attackRolls.evades[defenderID];
+
+
+	if(attackRolls.attack.multiHit == 5) {
+		// NOP for now
+	}
+	else if(attackRolls.attack.multiHit == 2) {
+
+	}
+	else {
+
+		var roll = rr.rolls[0];
+		log("PTU-ChAR roll: " + JSON.stringify(roll));
+		
+		var natRoll = roll.results[0].v;
+		sendChat("Game Rules Engine", "/w gm " + rollResult.who + " rolled an accuracy check for " + attackRolls.attack.moveName + ". Natural Roll: " + natRoll);
+
+		var modRoll = natRoll + attackRolls.bonus;
+
+		log("PTU-ChAR modRoll= " + modRoll);
+		log("PTU-ChAR goal= " + goal);
+
+		if(modRoll >= goal) {
+
+			sendChat("Game Rules Engine", "/w gm It's a hit!");
+
+			if(natRoll >= attackRolls.attack.critRange) {
+				sendChat("Game Rules Engine", "/w gm CRITICAL HIT!");
+				attackResult.crititalMultiplier = 2;
+			}
+
+			if( (attackRolls.attack.effectRange > 0) && (natRoll >= attackRolls.attack.effectRange) ) {
+				sendChat("Game Rules Engine", '/w gm Additional effect triggered! Effect: ' + attackRolls.attack.effectText);
+			}
+		}
+		else {
+			sendChat("Game Rules Engine", '/w gm ' + rollResult.who + " totally missed!");
+		}
+
+		
+	}
+
+
+}
+
 
 function PTU_Process_Attack_Roll(msg) {
 
@@ -632,26 +708,40 @@ function PTU_Process_Attack_Roll(msg) {
 
 	log("PTU-PAR attackerID: " + JSON.stringify(oAttacker));
 
-	// The only argument to ~attack is #1 = move name
-	var attackRolls = PTU_Calc_Attack_Rolls(oAttacker.get('._id'),defenderIDs, cmdLine[1]);
+	var aID = oAttacker.get('._id');
 
-	for(var defenderID = 0; defenderID < attackRolls.evades.length; defenderID++){
-		if (attackRolls.attackMultiHit == 5) {
-			// Support this later
-		}
-		else
-		{
-			var rollStr = "/roll "
-			for(var rI = 0; rI < attackRolls.attackMultiHit; rI++){
-				rollStr += '1d20+';
+	log("PTU-PAR aID: " + aID);
+
+	// The only argument to ~attack is #1 = move name
+	var attackRolls = PTU_Calc_Attack_Rolls(aID ,defenderIDs, cmdLine[1]);
+	var move = attackRolls.attack;
+
+	log("PTU-PAR attackRolls.evades: " + JSON.stringify(attackRolls.evades));
+
+
+	for(var defenderID in attackRolls.evades) {
+		if (attackRolls.evades.hasOwnProperty(defenderID)) {
+			var numAttackRolls = move.multiHit;
+			if (attackRolls.attack.attackMultiHit == 5) {
+				// The crazy 1d8 stuff takes place during the damage calculations
+				// But we only roll 1 attack roll for all 5 attacks
+				numAttackRolls = 1;
 			}
-			sendChat(msg.who, rollStr, function(ops){
-				log("Attack Roll OPS: " + JSON.stringify(ops));
-			});
-		}
-		
+			else
+			{
+				var rollStr = "/roll ";
+				log("PTU-PAR move: " + JSON.stringify(move));
+				rollStr += numAttackRolls + "d20";
+				log("PTU-PAR: rollStr: " + rollStr);
+				sendChat(msg.who, rollStr, function(ops) {
+					log("PTU-PAR: about to call ChAR, aID = " + aID);
+					PTU_Check_Attack_Roll(ops[0], attackRolls, aID, defenderID);
+				});
+			}
+		}		
 	}
-	
+
+
 
 }
 
@@ -665,13 +755,13 @@ function PTU_Init_Character(character) {
 				_type: "attribute",
 				_characterid: character.get("_id"),
 				_name: prop,
-			})
+			});
 			if(attrExist.length < 1) {
 				var retObj = createObj("attribute", {
 					name: prop,
 					current: PTU_Init_Character_Map[prop],
 					characterid: character.get("_id")
-				})
+				});
 				log(JSON.stringify("PTU-IC init " + prop + " for " + character.get("name") + ": " + JSON.stringify(retObj)));
 			}
 		}
@@ -692,6 +782,7 @@ function PTU_Init_All_Characters() {
 	sendChat("Game Rules Engine", "/w gm DONE initializing all characters.");
 }
 
+
 on("chat:message", function(msg) {
   if(msg.type == "api" && msg.content.indexOf("~attack") !== -1) {
     PTU_Process_Attack_Roll(msg);
@@ -699,4 +790,96 @@ on("chat:message", function(msg) {
   else if(msg.type == "api" && msg.content.indexOf("~initAll") !== -1)  {
   	PTU_Init_All_Characters();
   }
-})
+});
+
+on("change:attribute:current", function(obj, prev) {
+	var charID = obj.get('_characterid');
+	var attrName = obj.get('name');
+
+	var physEv;
+	var specEv;
+	var speedEv;
+
+	log("change-attribute: " + JSON.stringify(obj));
+
+	try {
+
+		switch(attrName) {
+		case 'DEF':
+			physEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'PhysEvade'
+			})[0];
+			physEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'DEF_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 10), 9);
+			break;	
+		case 'SPDEF':
+			specEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpecEvade'
+			})[0];
+			specEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPDEF_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;	
+		case 'SPEED':
+			speedEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpeedEvade'
+			})[0];
+			speedEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPEED_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;	
+		case 'DEF_Stage':
+			physEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'PhysEvade'
+			})[0];
+			physEv.set('current', Math.min(Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'DEF') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;
+		case 'SPDEF_Stage':
+			SpecEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpecEvade'
+			})[0];
+			SpecEv.set('current', Math.min(Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPDEF') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;	
+		case 'SPEED_Stage':
+			speedEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpeedEvade'
+			})[0];
+			speedEv.set('current',Math.min( Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPEED') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;
+		case 'Evasion':
+			physEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'PhysEvade'
+			})[0];
+			physEv.set('current', Math.min(Math.min(Math.floor(PTU_Get_Attr_Val_I(charID, 'DEF') * PTU_Get_Attr_Val_F(charID, 'DEF_Stage') / 5.0), 6) + parseInt(obj.get('current')), 9));
+			specEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpecEvade'
+			})[0];
+			specEv.set('current', Math.min(Math.min(Math.floor(PTU_Get_Attr_Val_I(charID, 'SPDEF') * PTU_Get_Attr_Val_F(charID, 'SPDEF_Stage') / 5.0), 6) + parseInt(obj.get('current')), 9));
+			speedEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpeedEvade'
+			})[0];
+			speedEv.set('current', Math.min(Math.min(Math.floor(PTU_Get_Attr_Val_I(charID, 'SPEED') * PTU_Get_Attr_Val_F(charID, 'SPEED_Stage') / 5.0), 6) + parseInt(obj.get('current')),9));
+			break;
+
+	}
+
+	}
+	catch(e)
+	{
+		log('caught error: ' + e.message);
+	}
+	
+});

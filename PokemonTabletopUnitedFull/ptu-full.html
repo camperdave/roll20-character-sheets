@@ -318,16 +318,24 @@
         <h3 class="sheet-header">Accuracy and Evasion</h3>
             <table class='sheet-table'>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Physical Evade:</td>
-                    <td><input type='number' name='attr_PhysEvade' disabled='true' value="floor(@{DEF_Total}/5)"/> (MAX 6)</td>
-                </tr>
-                <tr>
-                    <td class='sheet-table-header'>Special Evade:</td>
-                    <td><input type='number' name='attr_SpecEvade' disabled='true' value="floor(@{SPDEF_Total}/5)"/> (MAX 6)</td>
-                </tr>
-                <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Speed Evade:</td>
-                    <td><input type='number' name='attr_SpeedEvade' disabled='true' value="floor(@{SPEED_Total}/5)"/> (MAX 6)</td>
+                    <td class='sheet-table-header'>Evasion Combat Stage:</td>
+                    <td align='center'>
+                        <select class='sheet-shortfield2' name='attr_Evasion'>
+                            <option value='-6'>-6</option>
+                            <option value='-5'>-5</option>
+                            <option value='-4'>-4</option>
+                            <option value='-3'>-3</option>
+                            <option value='-2'>-2</option>
+                            <option value='-1'>-1</option>
+                            <option value='0' selected>0</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                        </select>
+                    </td>   
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Accuracy Combat Stage:</td>
@@ -349,6 +357,19 @@
                         </select>
                     </td>   
                 </tr>
+                <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>Physical Evade:</td>
+                    <td><input type='number' name='attr_PhysEvade' readonly='true'/></td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header'>Special Evade:</td>
+                    <td><input type='number' name='attr_SpecEvade' readonly='true'/></td>
+                </tr>
+                <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>Speed Evade:</td>
+                    <td><input type='number' name='attr_SpeedEvade' readonly='true'/></td>
+                </tr>
+                
             </table>
         <br />
         <h3 class="sheet-header">Capabilities</h3>
@@ -705,19 +726,19 @@
             <table class="sheet-table">
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>Move Name:</td>
-                    <td><input class='sheet-shortfield' type='text' name="attr_Move_Name"/></td>
+                    <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Move_Name"/></td>
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Frequency:</td>
-                    <td><input class='sheet-shortfield' type='text' name="attr_Move_Freq"/></td>
+                    <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Move_Freq"/></td>
                 </tr>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>AC:</td>
-                    <td><input type='number' name="attr_Move_AC"/><button type='roll' value='/roll 1d20 Attacking with @{Move_Name}, Wanting >= @{Move_AC}+Evasion' name='roll_MoveAtk' /></td>
+                    <td colspan='5'><input type='number' name="attr_Move_AC"/><button type='roll' value='/roll 1d20 Attacking with @{Move_Name}, Wanting >= @{Move_AC}+Evasion' name='roll_MoveAtk' /></td>
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Type:</td>
-                    <td>
+                    <td colspan='5'>
                         <select class='sheet-shortfield' name="attr_Move_DType">
                             <option value="normal">Normal</option>
                             <option value="fire">Fire</option>
@@ -742,58 +763,153 @@
                     </td>
                 </tr>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Damage Base</td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='This should be copied from the Moves index of the Core Rules'>?</div>
+                        <div class='sheet-float-L'>Damage Base</div>
+                        <div class='sheet-clear'></div>
+                    </td>
                     <td>
                         <input type='number' name='attr_Move_Damage_Base' />
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
+                        <div class='sheet-float-L'>B M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input type='number' name='attr_Move_Damage_Base_Mod_Perm' />
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                        <div class='sheet-float-L'>T M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input type='number' name='attr_Move_Damage_Base_Mod_Temp' />
                     </td>
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Damage Type:</td>
-                    <td>
+                    <td colspan='5'>
                         <input  type='radio' name="attr_Move_Type" value="physical">Physical</input>
                         <input  type='radio' name="attr_Move_Type" value="special">Special</input>
                         <input  type='radio' name="attr_Move_Type" value="status">Status</input>
                     </td>
                 </tr>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Accuracy Modifier</td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='This should be copied from the Moves index of the Core Rules. This will be zero in almost every case.'>?</div>
+                        <div class='sheet-floatL'>Accuracy Modifier</div>
+                        <div class='sheet-clear'
+                    </td>
                     <td>
-                        <input type='number' name='attr_Move_AccuracyBonus' value='0' />
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Accuracy' />
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
+                        <div class='sheet-float-L'>B M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Accuracy_Mod_Perm'/>
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                        <div class='sheet-float-L'>T M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Accuracy_Mod_Temp'/>
                     </td>
                 </tr>
                 <tr>
-                    <td class='sheet-table-header'>Crit Range ExtensioN</td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter the number that the critical hit range starts at. For example, if the move crits on 18-20, you would enter 18. This will be 20 for many moves.'>?</div>
+                        <div class='sheet-floatL'>Crit Range Start</div>
+                        <div class='sheet-clear'></div>
+                    </td>
                     <td>
-                        <input class='screen-floatL' type='number' name='attr_Move_CritBase' value='0'/>
-                        <div class='sheet-tooltip-icon' title='Increase the number of potential rolls in the critical hit range. 0 corresponds to only natural 20s critting, while 1 corresponds to a range of 19-20'>?</div>
-                        <div class='screen-clear'></div>
+                        <input title='Sorry, for technical reasons I really must require you to enter the value manually at this time.' type='number' name='attr_Move_CritRange'/>
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear. Values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                        <div class='sheet-float-L'>B M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_CritRange_Mod_Perm'/>
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll. Values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                        <div class='sheet-float-L'>T M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_CritRange_Mod_Temp'/>
                     </td>
                 </tr>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>Multi-Hit:</td>
-                    <td>
+                    <td colspan='5'>
                         <input  type='radio' name="attr_Move_MultiHit" value="1" checked='true'>Normal</input>
                         <input  type='radio' name="attr_Move_MultiHit" value="2">Double Strike</input>
                         <input  type='radio' name="attr_Move_MultiHit" value="5">Five Strike</input>
                     </td>
                 </tr>           
+                
+                <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter a 0 if this move has no effect. Enter the number that the effect starts at otherwise. For example, if the move burns on 18-20, you would enter 18.'>?</div>
+                        <div class='sheet-floatL'>Special Effect Range Start</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type="number" name='attr_Move_Effect_Range' />
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear. This will almost always be zero, but values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                        <div class='sheet-float-L'>B M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Effect_Range_Mod_Perm'/>
+                    </td>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll. Again, this will almost always be zero, but values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                        <div class='sheet-float-L'>T M:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Effect_Range_Mod_Temp'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title="Text entered here will be displayed if the accuracy check rolled indicates the move's special effect has activated.">?</div>
+                        <div class='sheet-floatL'>Effects:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td colspan='5'>
+                        <textarea class='sheet-textarea-b' name='attr_Move_Effects'></textarea>
+                    </td>
+                </tr>
+                <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title="Text entered here will always be displayed to the GM when the move is activated.">?</div>
+                        <div class='sheet-floatL'>Other Information:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td colspan='5'>
+                        <textarea class='sheet-textarea' name='attr_Move_OtherInfo'></textarea>
+                    </td>
+                </tr>
                 <tr>
                    <td class='sheet-table-header'>Damage Rolls:</td> 
-                   <td>
+                   <td colspan='5'>
                     <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />NEW ATTACK
                     <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{ATK_total} Damage from @{Move_Name}, Physical' name='roll_MoveAtkPhys' />O-Physical
                     <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />O-Special
                    </td>
-                </tr>
-                <tr>
-                    <td class='sheet-table-header'>Range:</td>
-                    <td><input class='sheet-shortfield' name='attr_Move_Range' type='text'/></td>
-                </tr>
-                <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Effects:</td>
-                    <td>
-                        <textarea class='sheet-textarea' name='attr_Move_Effects'></textarea>
-                    </td>
                 </tr>
             </table>
         </fieldset>
@@ -861,46 +977,4 @@
         </table>
     </fieldset>
 </div>
-<div class='sheet-row'>
-    <h3 class="sheet-header">Roll Modifiers</h3>
-</div>
-<div class='sheet-2colrow'>
-    <div class='sheet-col'>
-        <h4 class="sheet-minihead-bkg">
-            <div class="sheet-tooltip-icon" title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
-            <div class='sheet-minihead-floatL'>Permenant</div>
-            <div class='sheet-clear' />
-        </h4>
-        <table class='sheet-table'>
-            <tr class="sheet-banded  sheet-main-header">
-                <td class='sheet-table-header'>
-                    <div class="sheet-tooltip-icon" title='Fixed bonus to accuracy rolls'>?</div>
-                    <div class='sheet-floatL'>Accuracy Modifier:</div>
-                    <div class='sheet-clear' />
-                </td>
-                <td>
-                    <input class='sheet-shortfield' name='attr_Mod_Perm_Accuracy' type='number' value='0' />
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class='sheet-col'>
-        <h4 class="sheet-minihead-bkg">
-            <div class="sheet-tooltip-icon" title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
-            <div class='sheet-minihead-floatL'>Temporary</div>
-            <div class='sheet-clear' />
-        </h4>
-        <table class='sheet-table'>
-            <tr class="sheet-banded">
-                <td class='sheet-table-header'>
-                    <div class="sheet-tooltip-icon" title='Fixed bonus to accuracy rolls'>?</div>
-                    <div class='sheet-floatL'>Accuracy Modifier:</div>
-                    <div class='sheet-clear' />
-                </td>
-                <td>
-                    <input class='sheet-shortfield' name='attr_Mod_Temp_Accuracy' type='number' value='0' />
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+
