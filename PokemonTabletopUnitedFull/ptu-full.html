@@ -895,12 +895,12 @@
                 </tr>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>
-                        <div class='sheet-tooltip-icon' title="Text entered here will always be displayed to the GM when the move is activated.">?</div>
-                        <div class='sheet-floatL'>Other Information:</div>
+                        <div class='sheet-tooltip-icon' title="Text entered here will always be displayed when the move is activated.">?</div>
+                        <div class='sheet-floatL'>Flavor Text:</div>
                         <div class='sheet-clear'></div>
                     </td>
                     <td colspan='5'>
-                        <textarea class='sheet-textarea' name='attr_Move_OtherInfo'></textarea>
+                        <textarea class='sheet-textarea' name='attr_Move_FlavorText'></textarea>
                     </td>
                 </tr>
                 <tr>
@@ -910,6 +910,16 @@
                     <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{ATK_total} Damage from @{Move_Name}, Physical' name='roll_MoveAtkPhys' />O-Physical
                     <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />O-Special
                    </td>
+                </tr>
+                 <tr class='sheet-banded'>
+                    <td class='sheet-table-header'>
+                        <div class='sheet-tooltip-icon' title="Text entered here will always be displayed to the GM when the move is activated.">?</div>
+                        <div class='sheet-floatL'>GM Information:</div>
+                        <div class='sheet-clear'></div>
+                    </td>
+                    <td colspan='5'>
+                        <textarea class='sheet-textarea' name='attr_Move_GMInfo'></textarea>
+                    </td>
                 </tr>
             </table>
         </fieldset>

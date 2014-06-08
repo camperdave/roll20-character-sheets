@@ -521,6 +521,8 @@ function PTU_Get_Move(attackerID, moveName) {
 			oMove.critRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Temp"));
 			oMove.effectRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Temp"));
 			oMove.effectText = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_Effects");
+			oMove.flavorText = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_FlavorText");
+			oMove.gmInfoText = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_GMInfo");
 			log("PTU-GM (early) oMove: " + JSON.stringify(oMove));
 		}
 	}
@@ -532,9 +534,6 @@ function PTU_Get_Move(attackerID, moveName) {
 
 function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 	log("PTU-CAR attackerID: " + attackerID);
-	
-
-
 
 	var attackerAccuracyAttr = PTU_Get_Attr_Val_I(attackerID,"Accuracy");
 
@@ -587,75 +586,16 @@ function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 		log("PTU-CAR~ evade: " + evade);
 		attackRolls.evades[defenderIDs[i]] = evade;
 
-		
+		// This is a good time to parse any macro syntax out of the various text blocks.
+		attackRolls.attack.flavorText = MacroReplace.selectedCharacter(attackRolls.attack.flavorText, defenderIDs[i]);
+		attackRolls.attack.effectText = MacroReplace.selectedCharacter(attackRolls.attack.effectText, defenderIDs[i]);
+		attackRolls.attack.gmInfoText = MacroReplace.selectedCharacter(attackRolls.attack.gmInfoText, defenderIDs[i]);
+
 	}
 	return attackRolls;
 
 
 }
-
-function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) {
-	log("PTU-ChAR rollResult: " + JSON.stringify(rollResult));
-	log("PTU-ChAR attackRolls: " + JSON.stringify(attackRolls));
-	log("PTU-ChAR defenderID: " + defenderID);
-
-	var rr = JSON.parse(rollResult.content);
-	log("PTU-ChAR rolls content: " + JSON.stringify(rr));		// lol
-	log("PTU-ChAR rolls content.rolls: " + JSON.stringify(rr.rolls));
-
-	var attackResult = {
-		attackerID: attackerID,
-		defenderID: defenderID,
-		multiHit: attackRolls.attack.multiHit,
-	};
-
-	var damageBase = attackRolls.attack.damageBase;
-
-	var goal = attackRolls.attack.AC + attackRolls.evades[defenderID];
-
-
-	if(attackRolls.attack.multiHit == 5) {
-		// NOP for now
-	}
-	else if(attackRolls.attack.multiHit == 2) {
-
-	}
-	else {
-
-		var roll = rr.rolls[0];
-		log("PTU-ChAR roll: " + JSON.stringify(roll));
-		
-		var natRoll = roll.results[0].v;
-		sendChat("Game Rules Engine", "/w gm " + rollResult.who + " rolled an accuracy check for " + attackRolls.attack.moveName + ". Natural Roll: " + natRoll);
-
-		var modRoll = natRoll + attackRolls.bonus;
-
-		log("PTU-ChAR modRoll= " + modRoll);
-		log("PTU-ChAR goal= " + goal);
-
-		if(modRoll >= goal) {
-
-			sendChat("Game Rules Engine", "/w gm It's a hit!");
-
-			if(natRoll >= attackRolls.attack.critRange) {
-				sendChat("Game Rules Engine", "/w gm CRITICAL HIT!");
-				attackResult.crititalMultiplier = 2;
-			}
-
-			if( (attackRolls.attack.effectRange > 0) && (natRoll >= attackRolls.attack.effectRange) ) {
-				sendChat("Game Rules Engine", '/w gm Additional effect triggered! Effect: ' + attackRolls.attack.effectText);
-			}
-		}
-		else {
-			sendChat("Game Rules Engine", '/w gm ' + rollResult.who + " totally missed!");
-		}
-
-		
-	}
-
-
-}
-
 
 function PTU_Process_Attack_Roll(msg) {
 
@@ -740,9 +680,119 @@ function PTU_Process_Attack_Roll(msg) {
 			}
 		}		
 	}
+}
 
 
+function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) {
+	log("PTU-ChAR rollResult: " + JSON.stringify(rollResult));
+	log("PTU-ChAR attackRolls: " + JSON.stringify(attackRolls));
+	log("PTU-ChAR defenderID: " + defenderID);
 
+	var rr = JSON.parse(rollResult.content);
+	log("PTU-ChAR rolls content: " + JSON.stringify(rr));		// lol
+	log("PTU-ChAR rolls content.rolls: " + JSON.stringify(rr.rolls));
+
+	var attackResult = {
+		attackerID: attackerID,
+		defenderID: defenderID,
+		moveInfo: attackRolls.attack,
+		who: rollResult.who,
+	};
+
+	var damageBase = attackRolls.attack.damageBase;
+
+	var goal = attackRolls.attack.AC + attackRolls.evades[defenderID];
+
+
+	if(attackRolls.attack.multiHit == 5) {
+		// NOP for now
+	}
+	else if(attackRolls.attack.multiHit == 2) {
+
+	}
+	else {
+
+		var roll = rr.rolls[0];
+		log("PTU-ChAR roll: " + JSON.stringify(roll));
+		
+		var natRoll = roll.results[0].v;
+		sendChat("Game Rules Engine", "/w gm " + rollResult.who + " rolled an accuracy check for " + attackRolls.attack.moveName + ". Natural Roll: " + natRoll);
+
+		var modRoll = natRoll + attackRolls.bonus;
+
+		log("PTU-ChAR modRoll= " + modRoll);
+		log("PTU-ChAR goal= " + goal);
+
+		if(modRoll >= goal) {
+
+			sendChat("Game Rules Engine", "/w gm It's a hit!");
+
+			if(natRoll >= attackRolls.attack.critRange) {
+				sendChat("Game Rules Engine", "/w gm CRITICAL HIT!");
+				attackResult.crititalMultiplier = 2;
+			}
+
+			if( (attackRolls.attack.effectRange > 0) && (natRoll >= attackRolls.attack.effectRange) ) {
+				sendChat("Game Rules Engine", '/w gm Additional effect triggered! Effect: ' + attackRolls.attack.effectText);
+				attackResult.effect = attackRolls.attack.effectText;
+			}
+
+			attackResult.natRoll = natRoll;
+			PTU_Calc_Damage_Roll(attackResult);
+		}
+		else {
+			sendChat("Game Rules Engine", '/w gm ' + rollResult.who + " totally missed!");
+		}
+		
+	}
+
+	
+}
+
+
+function PTU_Calc_Damage_Roll(attackResult) {
+
+	var result  = attackResult;
+
+	result.finalDamage = 10;
+
+	PTU_Display_Result(result);
+
+}
+
+function PTU_Display_Result(result) {
+
+	var powerCard = {
+		name: result.moveInfo.moveName,
+
+	};
+	var modifiers = {
+		replaceRolls: false,
+	};
+
+
+	if(result.crititalMultiplier > 0) {
+		powerCard.critical = "IT'S A CRIT!";
+	}
+
+	if(result.effect !== undefined) {
+		powerCard["Additional Effect"] = result.effect;
+	}
+
+	if(result.moveInfo.flavorText !== undefined) {
+		powerCard.emote = result.moveInfo.flavorText;
+	}
+	log("PTU-DR: about to show Card!");
+	log("PTU-DR powerCard: " + JSON.stringify(powerCard));
+	log("PTU-DR modifiers: " + JSON.stringify(modifiers));
+
+	var fakeMsg = {
+		who: result.who,
+	}
+
+	log("PTU-DR fakeMsg: " + JSON.stringify(fakeMsg));
+
+	PowerCardScript.showCard(powerCard, modifiers, fakeMsg);
 }
 
 function PTU_Init_Character(character) {
