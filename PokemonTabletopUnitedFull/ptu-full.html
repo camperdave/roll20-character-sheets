@@ -166,7 +166,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_HP_total" value="floor(@{HP} * @{HP_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_HP_total" readonly='true' /></td>
             </tr>
             <tr>
                 <td class='sheet-table-header'>ATK</td>
@@ -186,7 +186,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_ATK_total" value="floor(@{ATK} * @{ATK_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_ATK_total" readonly='true' /></td>
             </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>DEF</td>
@@ -206,7 +206,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_DEF_total" value="floor(@{DEF} * @{DEF_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_DEF_total" readonly='true' /></td>
             </tr>
             <tr>
                 <td class='sheet-table-header'>SPATK</td>
@@ -226,7 +226,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_SPATK_total" value="floor(@{SPATK} * @{SPATK_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_SPATK_total" readonly='true' /></td>
             </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>SPDEF</td>
@@ -246,7 +246,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_SPDEF_total" value="floor(@{SPDEF} * @{SPDEF_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_SPDEF_total" readonly='true' /></td>
             </tr>
             <tr>
                 <td class='sheet-table-header'>SPEED</td>
@@ -266,7 +266,7 @@
                     <option value='2.25'>5</option>
                     <option value='2.5'>6</option>
                 </select></td>
-                <td align='center'><input type='number' name="attr_SPEED_total" value="floor(@{SPEED} * @{SPEED_Stage})" disabled="true" /></td>
+                <td align='center'><input type='number' name="attr_SPEED_total" readonly='true' /></td>
             </tr>
         </table>
     </div>
@@ -789,7 +789,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class='sheet-table-header'>Damage Type:</td>
+                    <td class='sheet-table-header'>Attack Type:</td>
                     <td colspan='5'>
                         <input  type='radio' name="attr_Move_Type" value="physical">Physical</input>
                         <input  type='radio' name="attr_Move_Type" value="special">Special</input>
@@ -797,10 +797,28 @@
                     </td>
                 </tr>
                 <tr class='sheet-banded'>
+                    <td class='sheet-table-header' colspan='2'>
+                        <div class='sheet-tooltip-icon' title='This will be added in the same step as your stats. Enter modifications caused by semi-permanent effects here, like features, edges or gear.'>?</div>
+                        <div class='sheet-floatL'>Permanent Damage Roll Bonus</div>
+                        <div class='sheet-clear'>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_DamageRoll_Mod_Perm' />
+                    </td>
+                    <td class='sheet-table-header' colspan='2'>
+                        <div class='sheet-tooltip-icon' title='This will be added in the same step as your stats. Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                        <div class='sheet-floatL'>Temporary Damage Roll Bonus</div>
+                        <div class='sheet-clear'>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_DamageRoll_Mod_Temp' />
+                    </td>
+                </tr>
+                <tr class='sheet-banded'>
                     <td class='sheet-table-header'>
                         <div class='sheet-tooltip-icon' title='This should be copied from the Moves index of the Core Rules. This will be zero in almost every case.'>?</div>
                         <div class='sheet-floatL'>Accuracy Modifier</div>
-                        <div class='sheet-clear'
+                        <div class='sheet-clear'>
                     </td>
                     <td>
                         <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Accuracy' />
@@ -857,7 +875,7 @@
                     </td>
                 </tr>           
                 
-                <tr class='sheet-banded'>
+                <tr>
                     <td class='sheet-table-header'>
                         <div class='sheet-tooltip-icon' title='Enter a 0 if this move has no effect. Enter the number that the effect starts at otherwise. For example, if the move burns on 18-20, you would enter 18.'>?</div>
                         <div class='sheet-floatL'>Special Effect Range Start</div>
@@ -883,7 +901,7 @@
                         <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Move_Effect_Range_Mod_Temp'/>
                     </td>
                 </tr>
-                <tr>
+                <tr class='sheet-banded'> 
                     <td class='sheet-table-header'>
                         <div class='sheet-tooltip-icon' title="Text entered here will be displayed if the accuracy check rolled indicates the move's special effect has activated.">?</div>
                         <div class='sheet-floatL'>Effects:</div>
@@ -893,7 +911,7 @@
                         <textarea class='sheet-textarea-b' name='attr_Move_Effects'></textarea>
                     </td>
                 </tr>
-                <tr class='sheet-banded'>
+                <tr>
                     <td class='sheet-table-header'>
                         <div class='sheet-tooltip-icon' title="Text entered here will always be displayed when the move is activated.">?</div>
                         <div class='sheet-floatL'>Flavor Text:</div>
@@ -903,7 +921,7 @@
                         <textarea class='sheet-textarea' name='attr_Move_FlavorText'></textarea>
                     </td>
                 </tr>
-                <tr>
+                <tr class='sheet-banded'>
                    <td class='sheet-table-header'>Damage Rolls:</td> 
                    <td colspan='5'>
                     <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />NEW ATTACK
@@ -911,7 +929,7 @@
                     <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />O-Special
                    </td>
                 </tr>
-                 <tr class='sheet-banded'>
+                 <tr>
                     <td class='sheet-table-header'>
                         <div class='sheet-tooltip-icon' title="Text entered here will always be displayed to the GM when the move is activated.">?</div>
                         <div class='sheet-floatL'>GM Information:</div>

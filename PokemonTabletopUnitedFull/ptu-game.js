@@ -1,37 +1,54 @@
-var PTU_damageBaseTable = [
-	"ZERO IS UNDEFINED",
-	"1d6+1",
-	"1d6+3",
-	"1d6+5",
-	"1d8+6",
-	"1d8+8",
-	"2d6+8",
-	"2d6+10",
-	"2d8+10",
-	"2d10+10",
-	"3d8+10",
-	"3d10+10",
-	"3d12+10",
-	"4d10+10",
-	"4d10+15",
-	"4d10+20",
-	"5d10+20",
-	"5d12+25",
-	"6d12+25",
-	"6d12+30",
-	"6d12+35",
-	"6d12+40",
-	"6d12+45",
-	"6d12+50",
-	"6d12+55",
-	"6d12+60",
-	"7d12+65",
-	"8d12+70",
-	"8d12+80"
+var PTU = PTU || {};
+PTU._vars = PTU._vars || {};
+PTU._internal = PTU._internal || {};
+
+
+PTU._internal.createDiceObj = function(numDice, numSides, modifier) {
+	return {
+		num: numDice,
+		sides: numSides,
+		mod: modifier,
+	};
+};
+
+PTU._internal.diceObjToString = function(diceObj) {
+	return diceObj.num + "d" + diceObj.sides + "+" + diceObj.mod;
+};
+
+PTU._vars.damageBaseTable = [
+	undefined,
+	PTU._internal.createDiceObj(1,6,1),
+	PTU._internal.createDiceObj(1,6,3),
+	PTU._internal.createDiceObj(1,6,5),
+	PTU._internal.createDiceObj(1,8,6),
+	PTU._internal.createDiceObj(1,8,8),
+	PTU._internal.createDiceObj(2,6,8),
+	PTU._internal.createDiceObj(2,6,10),
+	PTU._internal.createDiceObj(2,8,10),
+	PTU._internal.createDiceObj(2,10,10),
+	PTU._internal.createDiceObj(3,8,10),
+	PTU._internal.createDiceObj(3,10,10),
+	PTU._internal.createDiceObj(3,12,10),
+	PTU._internal.createDiceObj(4,10,10),
+	PTU._internal.createDiceObj(4,10,15),
+	PTU._internal.createDiceObj(4,10,20),
+	PTU._internal.createDiceObj(5,10,20),
+	PTU._internal.createDiceObj(5,12,25),
+	PTU._internal.createDiceObj(6,12,25),
+	PTU._internal.createDiceObj(6,12,30),
+	PTU._internal.createDiceObj(6,12,35),
+	PTU._internal.createDiceObj(6,12,40),
+	PTU._internal.createDiceObj(6,12,45),
+	PTU._internal.createDiceObj(6,12,50),
+	PTU._internal.createDiceObj(6,12,55),
+	PTU._internal.createDiceObj(6,12,60),
+	PTU._internal.createDiceObj(7,12,65),
+	PTU._internal.createDiceObj(8,12,70),
+	PTU._internal.createDiceObj(8,12,80),
 ];
 
 /* PTU_Type_Effectiveness["offensive_type"]["defensive_type"] = Multiplyer */
-var PTU_Type_Effectiveness = {
+PTU._vars.typeEffectiveness = {
 	normal: {
 		normal: 1.0,
 		fire: 1.0,
@@ -434,7 +451,7 @@ var PTU_Type_Effectiveness = {
 };
 
 //							// Default Map
-var PTU_Init_Character_Map = {
+PTU._vars.initCharacterMap = {
 	CharType: 0,			// Pokemon-type by default
 	Level: 1,
 	EXP: 0,
@@ -454,6 +471,13 @@ var PTU_Init_Character_Map = {
 	// Consider doing the skills?
 	Mod_Perm_Accuracy: 0,
 	Mod_Temp_Accuracy: 0,
+	//Init the totals for the stats
+	HP_total: 0,
+	ATK_total: 0,
+	DEF_total: 0,
+	SPATK_total: 0,
+	SPDEF_total: 0,
+	SPEED_total: 0,
 };
 
 function PTU_Get_Attr(characterID, attrName) {
@@ -518,6 +542,7 @@ function PTU_Get_Move(attackerID, moveName) {
 			oMove.accuracyBonus = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Accuracy_Mod_Temp");
 			oMove.multiHit = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_MultiHit");
 			oMove.damageBase = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Damage_Base_Mod_Temp");
+			oMove.damageRollBonus = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_DamageRoll_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_DamageRoll_Mod_Temp"); 
 			oMove.critRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_CritRange_Mod_Temp"));
 			oMove.effectRange = PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range") - (PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, sPrefix+"_Move_Effect_Range_Mod_Temp"));
 			oMove.effectText = PTU_Get_Attr_Val(attackerID, sPrefix+"_Move_Effects");
@@ -531,6 +556,27 @@ function PTU_Get_Move(attackerID, moveName) {
 
 	return oMove;
 }
+
+PTU._internal.hasAbility = function(charID, abilityName) {
+	var oFilter = {
+		_type: "attribute",
+		_characterid: charID,
+		current: abilityName,
+	};
+
+	var oAttr = findObjs(oFilter,{
+		caseInsensitive: true
+	});
+
+	if (oAttr.length > 0) {
+		for(var i = 0; i < oAttr.length; i++) {
+			if(oAttr[i].get('name').indexOf("Ability_Name") > 0){
+				return true;
+			}
+		}
+	}
+	return false;
+};
 
 function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 	log("PTU-CAR attackerID: " + attackerID);
@@ -697,6 +743,7 @@ function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) 
 		defenderID: defenderID,
 		moveInfo: attackRolls.attack,
 		who: rollResult.who,
+		crititalMultiplier: 1,
 	};
 
 	var damageBase = attackRolls.attack.damageBase;
@@ -728,8 +775,12 @@ function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) 
 			sendChat("Game Rules Engine", "/w gm It's a hit!");
 
 			if(natRoll >= attackRolls.attack.critRange) {
-				sendChat("Game Rules Engine", "/w gm CRITICAL HIT!");
-				attackResult.crititalMultiplier = 2;
+				if(PTU._internal.hasAbility(attackerID, "sniper")) {
+					attackResult.crititalMultiplier = 3;
+				}
+				else {
+					attackResult.crititalMultiplier = 2;	
+				}				
 			}
 
 			if( (attackRolls.attack.effectRange > 0) && (natRoll >= attackRolls.attack.effectRange) ) {
@@ -738,23 +789,70 @@ function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) 
 			}
 
 			attackResult.natRoll = natRoll;
-			PTU_Calc_Damage_Roll(attackResult);
+
+			// Add 2 to the damage base for STAB after all attack style specific calculations are done if the types match.
+			var attackerType1 = PTU_Get_Attr_Val(attackResult.attackerID, "type1");
+			var attackerType2 = PTU_Get_Attr_Val(attackResult.attackerID, "type2");
+			if ((attackResult.moveInfo.damageType.toLowerCase() === attackerType1.toLowerCase()) || (attackResult.moveInfo.damageType.toLowerCase() === attackerType2.toLowerCase())) {
+				attackResult.moveInfo.damageBase = attackResult.moveInfo.damageBase + 2;
+			}
+
+			var dmgRoll = PTU._vars.damageBaseTable[attackResult.moveInfo.damageBase];
+
+			log("PTU-ChAR dmgRoll: " + JSON.stringify(dmgRoll));
+			log("PTU-ChAR aR-mI-dB: " + attackResult.moveInfo.damageBase);
+
+			
+
+			dmgRoll.num = dmgRoll.num * attackResult.crititalMultiplier;
+			dmgRoll.mod = dmgRoll.mod * attackResult.crititalMultiplier;
+
+			log("PTU-ChAR dmgRoll (after crit): " + JSON.stringify(dmgRoll));
+
+
+			attackResult.damageRoll = dmgRoll;
+
+			sendChat(attackResult.who, "/roll " + PTU._internal.diceObjToString(attackResult.damageRoll), function(ops) {
+				PTU_Check_Damage_Roll(ops[0], attackResult);
+			});
+			
 		}
 		else {
 			sendChat("Game Rules Engine", '/w gm ' + rollResult.who + " totally missed!");
 		}
 		
 	}
-
-	
 }
 
 
-function PTU_Calc_Damage_Roll(attackResult) {
+function PTU_Check_Damage_Roll(msg, attackResult) {
 
 	var result  = attackResult;
 
-	result.finalDamage = 10;
+	log("PTU-CD ops: " + JSON.stringify(msg));
+
+	var rr = JSON.parse(msg.content);
+
+	log("PTU-CD rr: " + JSON.stringify(rr));		// lol
+
+	var damage = rr.total;
+
+	log("PTU-CD roll total: " + JSON.stringify(damage));
+
+	if(attackResult.moveInfo.attackType === 'physical') {
+		damage = damage + PTU_Get_Attr_Val_I(attackResult.attackerID, "ATK_total");
+	}
+	else if(attackResult.moveInfo.attackType === 'special') {
+		damage = damage + PTU_Get_Attr_Val_I(attackResult.attackerID, "SPATK_total");
+	}
+	else {
+		log("PTU-ChDR serious error, rolling non-physical non special attack");
+		return;
+	}
+
+	damage = damage + attackResult.moveInfo.damageRollBonus;
+
+	log("PTU-CD damage: " + JSON.stringify(damage));
 
 	PTU_Display_Result(result);
 
@@ -788,7 +886,7 @@ function PTU_Display_Result(result) {
 
 	var fakeMsg = {
 		who: result.who,
-	}
+	};
 
 	log("PTU-DR fakeMsg: " + JSON.stringify(fakeMsg));
 
@@ -797,9 +895,9 @@ function PTU_Display_Result(result) {
 
 function PTU_Init_Character(character) {
 	
-	for(var prop in PTU_Init_Character_Map) {
+	for(var prop in PTU._vars.initCharacterMap) {
 
-		if(PTU_Init_Character_Map.hasOwnProperty(prop)) {
+		if(PTU._vars.initCharacterMap.hasOwnProperty(prop)) {
 
 			var attrExist = findObjs({
 				_type: "attribute",
@@ -809,7 +907,7 @@ function PTU_Init_Character(character) {
 			if(attrExist.length < 1) {
 				var retObj = createObj("attribute", {
 					name: prop,
-					current: PTU_Init_Character_Map[prop],
+					current: PTU._vars.initCharacterMap[prop],
 					characterid: character.get("_id")
 				});
 				log(JSON.stringify("PTU-IC init " + prop + " for " + character.get("name") + ": " + JSON.stringify(retObj)));
@@ -850,36 +948,73 @@ on("change:attribute:current", function(obj, prev) {
 	var specEv;
 	var speedEv;
 
+	var hpTotal;
+	var atkTotal;
+	var defTotal;
+	var spatkTotal;
+	var spdefTotal;
+	var speedTotal;
+
 	log("change-attribute: " + JSON.stringify(obj));
 
 	try {
 
 		switch(attrName) {
+		case 'HP':
+			hpTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'HP_total'
+			})[0];
+			hpTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'HP_Stage')));
+			break;
+		case 'HP_Stage':
+			hpTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'HP_total'
+			})[0];
+			hpTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'HP')));
+			break;
+		case 'ATK':
+			atkTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'ATK_total'
+			})[0];
+			atkTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'ATK_Stage')));
+			break;
+		case 'ATK_Stage':
+			atkTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'ATK_total'
+			})[0];
+			atkTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'ATK')));
+			break;	
 		case 'DEF':
+			defTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'DEF_total'
+			})[0];
+			defTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'DEF_Stage')));
+
 			physEv = findObjs({
 				_type: "attribute",
 				_characterid: charID,
 				_name: 'PhysEvade'
 			})[0];
 			physEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'DEF_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 10), 9);
-			break;	
-		case 'SPDEF':
-			specEv = findObjs({
-				_type: "attribute",
-				_characterid: charID,
-				_name: 'SpecEvade'
-			})[0];
-			specEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPDEF_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
-			break;	
-		case 'SPEED':
-			speedEv = findObjs({
-				_type: "attribute",
-				_characterid: charID,
-				_name: 'SpeedEvade'
-			})[0];
-			speedEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPEED_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
-			break;	
+			break;
 		case 'DEF_Stage':
+			defTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'DEF_total'
+			})[0];
+			defTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'DEF')));
+
 			physEv = findObjs({
 				_type: "attribute",
 				_characterid: charID,
@@ -887,7 +1022,45 @@ on("change:attribute:current", function(obj, prev) {
 			})[0];
 			physEv.set('current', Math.min(Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'DEF') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
 			break;
+		case 'SPATK':
+			spatkTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPATK_total'
+			})[0];
+			spatkTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPATK_Stage')));
+			break;
+		case 'SPATK_Stage':
+			atkTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPATK_total'
+			})[0];
+			atkTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPATK')));
+			break;		
+		case 'SPDEF':
+			spdefTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPDEF_total'
+			})[0];
+			spdefTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPDEF_Stage')));
+
+			specEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpecEvade'
+			})[0];
+			specEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPDEF_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;
 		case 'SPDEF_Stage':
+			spdefTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPDEF_total'
+			})[0];
+			spdefTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPDEF')));
+
 			SpecEv = findObjs({
 				_type: "attribute",
 				_characterid: charID,
@@ -895,7 +1068,29 @@ on("change:attribute:current", function(obj, prev) {
 			})[0];
 			SpecEv.set('current', Math.min(Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPDEF') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
 			break;	
+		case 'SPEED':
+			speedTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPEED_total'
+			})[0];
+			speedTotal.set('current', Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPEED_Stage')));
+
+			speedEv = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SpeedEvade'
+			})[0];
+			speedEv.set('current', Math.min(Math.min(Math.floor(parseInt(obj.get('current')) * PTU_Get_Attr_Val_F(charID, 'SPEED_Stage') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
+			break;	
 		case 'SPEED_Stage':
+			speedTotal = findObjs({
+				_type: "attribute",
+				_characterid: charID,
+				_name: 'SPEED_total'
+			})[0];
+			speedTotal.set('current', Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPEED')));
+
 			speedEv = findObjs({
 				_type: "attribute",
 				_characterid: charID,
@@ -903,6 +1098,8 @@ on("change:attribute:current", function(obj, prev) {
 			})[0];
 			speedEv.set('current',Math.min( Math.min(Math.floor(parseFloat(obj.get('current')) * PTU_Get_Attr_Val_I(charID, 'SPEED') / 5.0), 6) + PTU_Get_Attr_Val_I(charID, 'Evasion'), 9));
 			break;
+
+
 		case 'Evasion':
 			physEv = findObjs({
 				_type: "attribute",

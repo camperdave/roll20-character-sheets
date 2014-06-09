@@ -63,7 +63,13 @@ MacroReplace.selectedCharacter = function(message, selectedChar) {
 
 				if(attrs.length > 0) {
 					var attr = attrs[0];
-					parts[i] = attr.get('current') + excess;
+
+					if (doMax) {
+						parts[i] = attr.get('max') + excess;
+					}
+					else {
+						parts[i] = attr.get('current') + excess;
+					}
 					continue;
 				}
 				else {
