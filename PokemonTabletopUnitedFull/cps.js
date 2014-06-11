@@ -224,7 +224,6 @@ PowerCardScript.showCard = function(PowerCard, modifiers, msg) {
 		}
 	} else {
         // NO INLINE ROLLS
-        log("CPS-DAL: no inline roll about to send.");
 		if (PowerCard.emote !== undefined) sendChat(msg.who, "/emas " + PowerCard.emote);
 		if (PowerCard.desc !== undefined) sendChat("", "/desc ");
 		sendChat("", "/direct " + DisplayCard);

@@ -318,7 +318,7 @@
         <h3 class="sheet-header">Accuracy and Evasion</h3>
             <table class='sheet-table'>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Evasion Combat Stage:</td>
+                    <td class='sheet-table-header' colspan='5'>Evasion Combat Stage:</td>
                     <td align='center'>
                         <select class='sheet-shortfield2' name='attr_Evasion'>
                             <option value='-6'>-6</option>
@@ -338,7 +338,7 @@
                     </td>   
                 </tr>
                 <tr>
-                    <td class='sheet-table-header'>Accuracy Combat Stage:</td>
+                    <td class='sheet-table-header' colspan='5'>Accuracy Combat Stage:</td>
                     <td align='center'>
                         <select class='sheet-shortfield2' name='attr_Accuracy'>
                             <option value='-6'>-6</option>
@@ -358,16 +358,34 @@
                     </td>   
                 </tr>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Physical Evade:</td>
+                    <td class='sheet-table-header' colspan='5'>Physical Evade:</td>
                     <td><input type='number' name='attr_PhysEvade' readonly='true'/></td>
                 </tr>
                 <tr>
-                    <td class='sheet-table-header'>Special Evade:</td>
+                    <td class='sheet-table-header' colspan='5'>Special Evade:</td>
                     <td><input type='number' name='attr_SpecEvade' readonly='true'/></td>
                 </tr>
                 <tr class='sheet-banded'>
-                    <td class='sheet-table-header'>Speed Evade:</td>
+                    <td class='sheet-table-header' colspan='5'>Speed Evade:</td>
                     <td><input type='number' name='attr_SpeedEvade' readonly='true'/></td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header' colspan='2'>
+                        <div class='sheet-tooltip-icon' title='This will be subtracted from all damage you recieve prior to weaknesses/resistances. Enter modifications caused by semi-permanent effects here, like features, edges or gear.'>?</div>
+                        <div class='sheet-floatL'>Permanent Damage Reduction</div>
+                        <div class='sheet-clear'>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Damage_Reduction_Perm' />
+                    </td>
+                    <td class='sheet-table-header' colspan='2'>
+                        <div class='sheet-tooltip-icon' title='This will be subtracted from all damage you recieve prior to weaknesses/resistances. Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                        <div class='sheet-floatL'>Temporary Damage Reduction</div>
+                        <div class='sheet-clear'>
+                    </td>
+                    <td>
+                        <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Damage_Reduction_Temp' />
+                    </td>
                 </tr>
                 
             </table>
@@ -872,6 +890,7 @@
                         <input  type='radio' name="attr_Move_MultiHit" value="1" checked='true'>Normal</input>
                         <input  type='radio' name="attr_Move_MultiHit" value="2">Double Strike</input>
                         <input  type='radio' name="attr_Move_MultiHit" value="5">Five Strike</input>
+                        <input  type='radio' name="attr_Move_MultiHit" value="3">Triple Kick</input>
                     </td>
                 </tr>           
                 
@@ -922,11 +941,9 @@
                     </td>
                 </tr>
                 <tr class='sheet-banded'>
-                   <td class='sheet-table-header'>Damage Rolls:</td> 
+                   <td class='sheet-table-header'>Rolls:</td> 
                    <td colspan='5'>
-                    <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />NEW ATTACK
-                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{ATK_total} Damage from @{Move_Name}, Physical' name='roll_MoveAtkPhys' />O-Physical
-                    <button type='roll' value='/roll @{Move_Amount}@{Move_Dice}+@{Move_Bonus}+@{SPATK_total} Damage from @{Move_Name}, Special' name='roll_MoveAtkSpec' />O-Special
+                    <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />Attack!</button>
                    </td>
                 </tr>
                  <tr>
