@@ -480,6 +480,30 @@ PTU._vars.initCharacterMap = {
 	SPATK_total: 0,
 	SPDEF_total: 0,
 	SPEED_total: 0,
+	// Need to init Struggle attributes
+	Struggle_Name: "Struggle",
+	Struggle_Freq: "At Will",
+	Struggle_AC: 4,
+	Struggle_DType: "normal",
+	Struggle_Damage_Base: 4,
+	Struggle_Damage_Base_Mod_Perm: 0,
+	Struggle_Damage_Base_Mod_Temp: 0,
+	Struggle_Type: "physical",
+	Struggle_MultiHit: 1,
+	Struggle_DamageRoll_Mod_Perm: 0,
+	Struggle_DamageRoll_Mod_Temp: 0,
+	Struggle_Accuracy: 0,
+	Struggle_Accuracy_Mod_Perm: 0,
+	Struggle_Accuracy_Mod_Temp: 0,
+	Struggle_CritRange: 20,
+	Struggle_CritRange_Mod_Perm: 0,
+	Struggle_CritRange_Mod_Temp: 0,
+	Struggle_Effect_Range: 0,
+	Struggle_Effect_Range_Mod_Perm: 0,
+	Struggle_Effect_Range_Mod_Temp: 0,
+	Struggle_Effects: "",
+	Struggle_FlavorText: "I really should have replaced this text with a cool, evocative description of a struggling attack.",
+	Struggle_GMInfo: "",
 };
 
 function PTU_Get_Attr(characterID, attrName) {
@@ -515,7 +539,21 @@ function PTU_Get_Move(attackerID, moveName) {
 	// log("PTU-GM attackerID: " + JSON.stringify(attackerID));
 
 	if (moveName.toLowerCase() == "struggle"){
-
+		oMove.moveName = moveName;
+		oMove.AC = PTU_Get_Attr_Val_I(attackerID, "Struggle_AC");
+		oMove.attackType = PTU_Get_Attr_Val(attackerID, "Struggle_Type");
+		oMove.damageType = PTU_Get_Attr_Val(attackerID, "Struggle_DType");
+		oMove.freq = PTU_Get_Attr_Val(attackerID, "Struggle_Freq");
+		oMove.accuracyBonus = PTU_Get_Attr_Val_I(attackerID, "Struggle_Accuracy") + PTU_Get_Attr_Val_I(attackerID, "Struggle_Accuracy_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, "Struggle_Accuracy_Mod_Temp");
+		oMove.multiHit = PTU_Get_Attr_Val_I(attackerID, "Struggle_MultiHit");
+		oMove.damageBase = PTU_Get_Attr_Val_I(attackerID, "Struggle_Damage_Base") + PTU_Get_Attr_Val_I(attackerID, "Struggle_Damage_Base_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, "Struggle_Damage_Base_Mod_Temp");
+		oMove.damageRollBonus = PTU_Get_Attr_Val_I(attackerID, "Struggle_DamageRoll_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, "Struggle_DamageRoll_Mod_Temp"); 
+		oMove.critRange = PTU_Get_Attr_Val_I(attackerID, "Struggle_CritRange") - (PTU_Get_Attr_Val_I(attackerID, "Struggle_CritRange_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, "Struggle_CritRange_Mod_Temp"));
+		oMove.effectRange = PTU_Get_Attr_Val_I(attackerID, "Struggle_Effect_Range") - (PTU_Get_Attr_Val_I(attackerID, "Struggle_Effect_Range_Mod_Perm") + PTU_Get_Attr_Val_I(attackerID, "Struggle_Effect_Range_Mod_Temp"));
+		oMove.effectText = PTU_Get_Attr_Val(attackerID, "Struggle_Effects");
+		oMove.flavorText = PTU_Get_Attr_Val(attackerID, "Struggle_FlavorText");
+		oMove.gmInfoText = PTU_Get_Attr_Val(attackerID, "Struggle_GMInfo");
+		log("Struggle oMove: " + JSON.stringify(oMove))
 	}
 	else {
 

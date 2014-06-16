@@ -558,6 +558,7 @@
             <td><input type='number' name='attr_Acrobatics_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Acrobatics_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Acrobatics}d6 + @{Acrobatics_Attrib} + @{Acrobatics_bonus} Acrobatics Check' name='roll_AcrobaticsCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Acrobatics}d6 + @{Acrobatics_Attrib} + @{Acrobatics_bonus} Acrobatics Check' name='roll_AcrobaticsCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Athletics</td>
@@ -565,6 +566,7 @@
             <td><input type='number' name='attr_Athletics_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Athletics_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Athletics}d6 + @{Athletics_Attrib} + @{Athletics_bonus} Athletics Check' name='roll_AthleticsCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Athletics}d6 + @{Athletics_Attrib} + @{Athletics_bonus} Athletics Check' name='roll_AthleticsCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Combat</td>
@@ -572,6 +574,7 @@
             <td><input type='number' name='attr_Combat_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Combat_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Combat}d6 + @{Combat_Attrib} + @{Combat_bonus} Combat Check' name='roll_CombatCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Combat}d6 + @{Combat_Attrib} + @{Combat_bonus} Combat Check' name='roll_CombatCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Intimidate</td>
@@ -579,6 +582,7 @@
             <td><input type='number' name='attr_Intimidate_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Intimidate_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Intimidate}d6 + @{Intimidate_Attrib} + @{Intimidate_bonus} Intimidate Check' name='roll_IntimidateCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Intimidate}d6 + @{Intimidate_Attrib} + @{Intimidate_bonus} Intimidate Check' name='roll_IntimidateCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Stealth</td>
@@ -586,6 +590,7 @@
             <td><input type='number' name='attr_Stealth_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Stealth_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Stealth}d6 + @{Stealth_Attrib} + @{Stealth_bonus} Stealth Check' name='roll_StealthCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Stealth}d6 + @{Stealth_Attrib} + @{Stealth_bonus} Stealth Check' name='roll_StealthCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Survival</td>
@@ -593,6 +598,7 @@
             <td><input type='number' name='attr_Survival_Attrib' disabled='true' value='@{CharType}*@{Body}' /> +</td>
             <td><input type='number' name='attr_Survival_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Survival}d6 + @{Survival_Attrib} + @{Survival_bonus} Survival Check' name='roll_SurvivalCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Survival}d6 + @{Survival_Attrib} + @{Survival_bonus} Survival Check' name='roll_SurvivalCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>GeneralEducation</td>
@@ -600,6 +606,7 @@
             <td><input type='number' name='attr_GeneralEducation_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_GeneralEducation_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{GeneralEducation}d6 + @{GeneralEducation_Attrib} + @{GeneralEducation_bonus} General Education Check' name='roll_GeneralEducationCheck' /></td>
+            <td>GM: <button type='roll' value='/gmroll @{GeneralEducation}d6 + @{GeneralEducation_Attrib} + @{GeneralEducation_bonus} General Education Check' name='roll_GeneralEducationCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Medicine Education</td>
@@ -607,6 +614,7 @@
             <td><input type='number' name='attr_MedicineEducation_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_MedicineEducation_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{MedicineEducation}d6 + @{MedicineEducation_Attrib} + @{MedicineEducation_bonus} Medicine Education Check' name='roll_MedicineEducationCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{MedicineEducation}d6 + @{MedicineEducation_Attrib} + @{MedicineEducation_bonus} Medicine Education Check' name='roll_MedicineEducationCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Occult Education</td>
@@ -614,6 +622,7 @@
             <td><input type='number' name='attr_OccultEducation_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_OccultEducation_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{OccultEducation}d6 + @{OccultEducation_Attrib} + {@OccultEducation_bonus} Occult Education Check' name='roll_OccultEducationCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{OccultEducation}d6 + @{OccultEducation_Attrib} + {@OccultEducation_bonus} Occult Education Check' name='roll_OccultEducationCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Pokemon Education</td>
@@ -621,6 +630,7 @@
             <td><input type='number' name='attr_PokemonEducation_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_PokemonEducation_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{PokemonEducation}d6 + @{PokemonEducation_Attrib} + @{PokemonEducation_bonus} Pokemon Education Check' name='roll_PokemonEducationCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{PokemonEducation}d6 + @{PokemonEducation_Attrib} + @{PokemonEducation_bonus} Pokemon Education Check' name='roll_PokemonEducationCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Technology Education</td>
@@ -628,6 +638,7 @@
             <td><input type='number' name='attr_TechnologyEducation_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_TechnologyEducation_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{TechnologyEducation}d6 + @{TechnologyEducation_Attrib} + {@TechnologyEducation_bonus} Technology Education Check' name='roll_TechnologyEducationCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{TechnologyEducation}d6 + @{TechnologyEducation_Attrib} + {@TechnologyEducation_bonus} Technology Education Check' name='roll_TechnologyEducationCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Guile</td>
@@ -635,6 +646,7 @@
             <td><input type='number' name='attr_Guile_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_Guile_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Guile}d6 + @{Guile_Attrib} + @{Guile_bonus} Guile Check' name='roll_GuileCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Guile}d6 + @{Guile_Attrib} + @{Guile_bonus} Guile Check' name='roll_GuileCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Perception</td>
@@ -642,6 +654,7 @@
             <td><input type='number' name='attr_Perception_Attrib' disabled='true' value='@{CharType}*@{Mind}' /> +</td>
             <td><input type='number' name='attr_Perception_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Perception}d6 + @{Perception_Attrib} + @{Perception_bonus} Perception Check' name='roll_PerceptionCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Perception}d6 + @{Perception_Attrib} + @{Perception_bonus} Perception Check' name='roll_PerceptionCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Charm</td>
@@ -649,6 +662,7 @@
             <td><input type='number' name='attr_Charm_Attrib' disabled='true' value='@{CharType}*@{Spirit}' /> +</td>
             <td><input type='number' name='attr_Charm_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Charm}d6 + @{Charm_Attrib} + @{Charm_bonus} Charm Check' name='roll_CharmCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Charm}d6 + @{Charm_Attrib} + @{Charm_bonus} Charm Check' name='roll_CharmCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Command</td>
@@ -656,6 +670,7 @@
             <td><input type='number' name='attr_Command_Attrib' disabled='true' value='@{CharType}*@{Spirit}' /> +</td>
             <td><input type='number' name='attr_Command_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Command}d6 + @{Command_Attrib} + @{Command_bonus} Command Check' name='roll_CommandCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Command}d6 + @{Command_Attrib} + @{Command_bonus} Command Check' name='roll_CommandCheck' /></td>
         </tr>
         <tr>
             <td class='sheet-table-header'>Focus</td>
@@ -663,6 +678,7 @@
             <td><input type='number' name='attr_Focus_Attrib' disabled='true' value='@{CharType}*@{Spirit}' /> +</td>
             <td><input type='number' name='attr_Focus_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Focus}d6 + @{Focus_Attrib} + @{Focus_bonus} Focus Check' name='roll_FocusCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Focus}d6 + @{Focus_Attrib} + @{Focus_bonus} Focus Check' name='roll_FocusCheck' /></td>
         </tr>
         <tr class='sheet-banded'>
             <td class='sheet-table-header'>Intuition</td>
@@ -670,6 +686,7 @@
             <td><input type='number' name='attr_Intuition_Attrib' disabled='true' value='@{CharType}*@{Spirit}' /> +</td>
             <td><input type='number' name='attr_Intuition_bonus' value='0'/></td>
             <td><button type='roll' value='/roll @{Intuition}d6 + @{Intuition_Attrib} + @{Intuition_bonus} Intuition Check' name='roll_IntuitionCheck' /></td>
+            <td>GM:<button type='roll' value='/gmroll @{Intuition}d6 + @{Intuition_Attrib} + @{Intuition_bonus} Intuition Check' name='roll_IntuitionCheck' /></td>
         </tr>
 </div>
 <br />
@@ -687,54 +704,216 @@
         <table class="sheet-table">
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>Move Name:</td>
-                <td>Struggle</td>
+                <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Struggle_Name" readonly='true' value='Struggle'/></td>
             </tr>
             <tr>
                 <td class='sheet-table-header'>Frequency:</td>
-                <td>At-Will</td>
+                <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Struggle_Freq" readonly='true' value='At Will'/></td>
             </tr>
             <tr class='sheet-banded'>
                 <td class='sheet-table-header'>AC:</td>
-                <td><input type='number' name="attr_Struggle_AC" disabled='true' value='4' /><button type='roll' value='/roll 1d20 Attacking with Struggle, Wanting >= @{Struggle_AC}+Evasion' name='roll_StruggleAtk' /></td>
+                <td colspan='5'><input type='number' name="attr_Struggle_AC" readonly='true' value='4'/></td>
             </tr>
             <tr>
                 <td class='sheet-table-header'>Type:</td>
-                <td><input class='sheet-shortfield' type='text' name="attr_Struggle_Type"/></td>
+                <td colspan='5'>
+                    <select class='sheet-shortfield' name="attr_Struggle_DType">
+                        <option value="normal">Normal</option>
+                        <option value="fire">Fire</option>
+                        <option value="water">Water</option>
+                        <option value="electric">Electric</option>
+                        <option value="grass">Grass</option>
+                        <option value="ice">Ice</option>
+                        <option value="fighting">Fighting</option>
+                        <option value="poison">Poison</option>
+                        <option value="ground">Ground</option>
+                        <option value="flying">Flying</option>
+                        <option value="psychic">Psychic</option>
+                        <option value="bug">Bug</option>
+                        <option value="rock">Rock</option>
+                        <option value="ghost">Ghost</option>
+                        <option value="dragon">Dragon</option>
+                        <option value="dark">Dark</option>
+                        <option value="steel">Steel</option>
+                        <option value="fairy">Fairy</option>
+                        <option value="none">None</option>
+                    </select>
+                </td>
             </tr>
             <tr class='sheet-banded'>
-                <td class='sheet-table-header'>Damage:</td>
-                <td><input type='number' name='attr_Struggle_Amount'/><select class='sheet-shortfield2' name="attr_Struggle_Dice" class="dtype">                
-                      <option value="d6">d6</option>
-                      <option value="d8">d8</option>
-                      <option value="d10">d10</option>
-                      <option value="d12">d12</option>
-                    </select>+<input class='sheet-shortfield' type='number' name='attr_Struggle_Bonus'/>
-                    
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='This should be copied from the Moves index of the Core Rules'>?</div>
+                    <div class='sheet-float-L'>Damage Base</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input type='number' name='attr_Struggle_Damage_Base' readonly='true' value='4'/>
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
+                    <div class='sheet-float-L'>B M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input type='number' name='attr_Struggle_Damage_Base_Mod_Perm' />
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                    <div class='sheet-float-L'>T M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input type='number' name='attr_Struggle_Damage_Base_Mod_Temp' />
                 </td>
             </tr>
             <tr>
-                <td class='sheet-table-header'>Damage Type:</td>
-                <td>
-                    <input  type='radio' name="attr_Struggle_DType" value="Physical">Physical</input>
-                    <input  type='radio' name="attr_Struggle_DType" value="Special">Special</input>
-                    <input  type='radio' name="attr_Struggle_DType" value="Status">Status</input>
+                <td class='sheet-table-header'>Attack Type:</td>
+                <td colspan='5'>
+                    <input  type='radio' name="attr_Struggle_Type" value="physical" checked='true'>Physical</input>
+                    <input  type='radio' name="attr_Struggle_Type" value="special">Special</input>
+                    <input  type='radio' name="attr_Struggle_Type" value="status">Status</input>
                 </td>
             </tr>
             <tr class='sheet-banded'>
-               <td class='sheet-table-header'>Damage Rolls:</td> 
-               <td>
-                <button type='roll' value='/roll @{Struggle_Amount}@{Struggle_Dice}+@{Struggle_Bonus}+@{ATK_total} Damage from @{Struggle_Name}, Physical' name='roll_StruggleAtkPhys' />Physical
-                <button type='roll' value='/roll @{Struggle_Amount}@{Struggle_Dice}+@{Struggle_Bonus}+@{SPATK_total} Damage from @{Struggle_Name}, Special' name='roll_StruggleAtkSpec' />Special
+                <td class='sheet-table-header' colspan='2'>
+                    <div class='sheet-tooltip-icon' title='This will be added in the same step as your stats. Enter modifications caused by semi-permanent effects here, like features, edges or gear.'>?</div>
+                    <div class='sheet-floatL'>Permanent Damage Roll Bonus</div>
+                    <div class='sheet-clear'>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_DamageRoll_Mod_Perm' />
+                </td>
+                <td class='sheet-table-header' colspan='2'>
+                    <div class='sheet-tooltip-icon' title='This will be added in the same step as your stats. Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                    <div class='sheet-floatL'>Temporary Damage Roll Bonus</div>
+                    <div class='sheet-clear'>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_DamageRoll_Mod_Temp' />
+                </td>
+            </tr>
+            <tr class='sheet-banded'>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='This should be copied from the Moves index of the Core Rules. This will be zero in almost every case.'>?</div>
+                    <div class='sheet-floatL'>Accuracy Modifier</div>
+                    <div class='sheet-clear'>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_Accuracy' />
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear'>?</div>
+                    <div class='sheet-float-L'>B M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_Accuracy_Mod_Perm'/>
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll'>?</div>
+                    <div class='sheet-float-L'>T M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_Accuracy_Mod_Temp'/>
+                </td>
+            </tr>
+            <tr>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter the number that the critical hit range starts at. For example, if the move crits on 18-20, you would enter 18. This will be 20 for many moves.'>?</div>
+                    <div class='sheet-floatL'>Crit Range Start</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the value manually at this time.' type='number' name='attr_Struggle_CritRange'/>
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear. Values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                    <div class='sheet-float-L'>B M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_CritRange_Mod_Perm'/>
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll. Values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                    <div class='sheet-float-L'>T M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_CritRange_Mod_Temp'/>
+                </td>
+            </tr>
+            <tr class='sheet-banded'>
+                <td class='sheet-table-header'>Multi-Hit:</td>
+                <td colspan='5'>
+                    <input  type='radio' name="attr_Struggle_MultiHit" value="1" checked='true'>Normal</input>
+                    <input  type='radio' name="attr_Struggle_MultiHit" value="2">Double Strike</input>
+                    <input  type='radio' name="attr_Struggle_MultiHit" value="5">Five Strike</input>
+                    <input  type='radio' name="attr_Struggle_MultiHit" value="3">Triple Kick</input>
+                </td>
+            </tr>           
+            
+            <tr>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter a 0 if this move has no effect. Enter the number that the effect starts at otherwise. For example, if the move burns on 18-20, you would enter 18.'>?</div>
+                    <div class='sheet-floatL'>Special Effect Range Start</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type="number" name='attr_Struggle_Effect_Range' />
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by semi-permanent effects here, like features, edges or gear. This will almost always be zero, but values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                    <div class='sheet-float-L'>B M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_Effect_Range_Mod_Perm'/>
+                </td>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title='Enter modifications caused by temporary effects here, like battle conditions or something the GM asks you to add for a single roll. Again, this will almost always be zero, but values entered here will be subtracted from the start value, leading to a higher "proc rate" of the effect with a larger number and a smaller chance with a negative number.'>?</div>
+                    <div class='sheet-float-L'>T M:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td>
+                    <input title='Sorry, for technical reasons I really must require you to enter the 0 manually at this time.' type='number' name='attr_Struggle_Effect_Range_Mod_Temp'/>
+                </td>
+            </tr>
+            <tr class='sheet-banded'> 
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title="Text entered here will be displayed if the accuracy check rolled indicates the move's special effect has activated.">?</div>
+                    <div class='sheet-floatL'>Effects:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td colspan='5'>
+                    <textarea class='sheet-textarea-b' name='attr_Struggle_Effects'></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title="Text entered here will always be displayed when the move is activated.">?</div>
+                    <div class='sheet-floatL'>Flavor Text:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td colspan='5'>
+                    <textarea class='sheet-textarea' name='attr_Struggle_FlavorText'></textarea>
+                </td>
+            </tr>
+            <tr class='sheet-banded'>
+               <td class='sheet-table-header'>Rolls:</td> 
+               <td colspan='5'>
+                <button type='roll' value='!~attack|Struggle' name='roll_Struggle-Attack' />Attack!</button>
                </td>
             </tr>
-            <tr>
-                <td class='sheet-table-header'>Range:</td>
-                <td><input class='sheet-shortfield' name='attr_Struggle_Range' type='text'/></td>
-            </tr>
-            <tr class='sheet-banded'>
-                <td class='sheet-table-header'>Effects:</td>
-                <td>
-                    <textarea class='sheet-textarea' name='attr_Struggle_Effects'></textarea>
+             <tr>
+                <td class='sheet-table-header'>
+                    <div class='sheet-tooltip-icon' title="Text entered here will always be displayed to the GM when the move is activated.">?</div>
+                    <div class='sheet-floatL'>GM Information:</div>
+                    <div class='sheet-clear'></div>
+                </td>
+                <td colspan='5'>
+                    <textarea class='sheet-textarea' name='attr_Struggle_GMInfo'></textarea>
                 </td>
             </tr>
         </table>
@@ -752,7 +931,7 @@
                 </tr>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>AC:</td>
-                    <td colspan='5'><input type='number' name="attr_Move_AC"/><button type='roll' value='/roll 1d20 Attacking with @{Move_Name}, Wanting >= @{Move_AC}+Evasion' name='roll_MoveAtk' /></td>
+                    <td colspan='5'><input type='number' name="attr_Move_AC"/></td>
                 </tr>
                 <tr>
                     <td class='sheet-table-header'>Type:</td>
