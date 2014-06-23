@@ -707,6 +707,10 @@
                 <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Struggle_Name" readonly='true' value='Struggle'/></td>
             </tr>
             <tr>
+                <td class='sheet-table-header'>Range:</td>
+                <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Struggle_Range"/></td>
+            </tr>
+            <tr>
                 <td class='sheet-table-header'>Frequency:</td>
                 <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Struggle_Freq" readonly='true' value='At Will'/></td>
             </tr>
@@ -903,7 +907,7 @@
             <tr class='sheet-banded'>
                <td class='sheet-table-header'>Rolls:</td> 
                <td colspan='5'>
-                <button type='roll' value='!~attack|Struggle' name='roll_Struggle-Attack' />Attack!</button>
+                <button type='roll' value='!~attack|Struggle|@{target|character_name}' name='roll_Struggle-Attack' />Attack!</button>
                </td>
             </tr>
              <tr>
@@ -928,6 +932,10 @@
                 <tr>
                     <td class='sheet-table-header'>Frequency:</td>
                     <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Move_Freq"/></td>
+                </tr>
+                <tr>
+                    <td class='sheet-table-header'>Range:</td>
+                    <td colspan='5'><input class='sheet-shortfield' type='text' name="attr_Move_Range"/></td>
                 </tr>
                 <tr class='sheet-banded'>
                     <td class='sheet-table-header'>AC:</td>
@@ -1122,7 +1130,7 @@
                 <tr class='sheet-banded'>
                    <td class='sheet-table-header'>Rolls:</td> 
                    <td colspan='5'>
-                    <button type='roll' value='!~attack|@{Move_Name}' name='roll_N-Attack' />Attack!</button>
+                    <button type='roll' value='!~attack|@{Move_Name}|@{target|character_name}' name='roll_N-Attack' />Attack!</button>
                    </td>
                 </tr>
                  <tr>

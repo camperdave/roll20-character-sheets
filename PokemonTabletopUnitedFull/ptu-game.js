@@ -553,7 +553,7 @@ function PTU_Get_Move(attackerID, moveName) {
 		oMove.effectText = PTU_Get_Attr_Val(attackerID, "Struggle_Effects");
 		oMove.flavorText = PTU_Get_Attr_Val(attackerID, "Struggle_FlavorText");
 		oMove.gmInfoText = PTU_Get_Attr_Val(attackerID, "Struggle_GMInfo");
-		log("Struggle oMove: " + JSON.stringify(oMove))
+		log("Struggle oMove: " + JSON.stringify(oMove));
 	}
 	else {
 
@@ -619,7 +619,7 @@ PTU._internal.hasAbility = function(charID, abilityName) {
 	return false;
 };
 
-function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
+function PTU_Calc_Attack_Rolls(attackerID, defenderID, moveName) {
 	// log("PTU-CAR attackerID: " + attackerID);
 
 	var attackerAccuracyAttr = PTU_Get_Attr_Val_I(attackerID,"Accuracy");
@@ -637,48 +637,46 @@ function PTU_Calc_Attack_Rolls(attackerID, defenderIDs, moveName) {
 	var attackRolls = {
 		bonus: attackerAccuracy,
 		attack: move,
-		evades: {},
 	};
 
 	// log("PTU-CAR attackRolls: " + JSON.stringify(attackRolls));
 
-	// log("PTU-CAR: defenderIDs: " + JSON.stringify(defenderIDs));
+	// log("PTU-CAR: defenderID: " + defenderID);
 
-	for(var i = 0; i < defenderIDs.length; i++) {
+	
 
-		// log("PTU-CAR defenderID: " + defenderIDs[i]);
+	// log("PTU-CAR defenderID: " + defenderID);
+	
+	var evadePhys;
+	var evadeSpec;
+	var evadeSpeed = PTU_Get_Attr_Val_I(defenderID, "SpeedEvade");
+
+	var evade;
+
+	if(move.attackType == "physical") {
+		// log("PTU-CAR: checking physical evasion for " + defenderID);
+		evadePhys = PTU_Get_Attr_Val_I(defenderID, "PhysEvade");
+		evade = Math.max(evadePhys, evadeSpeed);
 		
-		var evadePhys;
-		var evadeSpec;
-		var evadeSpeed = PTU_Get_Attr_Val_I(defenderIDs[i], "SpeedEvade");
-
-		var evade;
-
-		if(move.attackType == "physical") {
-			// log("PTU-CAR: checking physical evasion for " + defenderIDs[i]);
-			evadePhys = PTU_Get_Attr_Val_I(defenderIDs[i], "PhysEvade");
-			evade = Math.max(evadePhys, evadeSpeed);
-			
-		}
-		else if(move.attackType == "special") {
-			// log("PTU-CAR: checking special evasion for " + defenderIDs[i]);
-			evadeSpec = PTU_Get_Attr_Val_I(defenderIDs[i], "SpecEvade");
-			evade = Math.max(evadeSpec, evadeSpeed);
-		}
-		else {
-			// log("PTU-CAR: skipping for status move: " + defenderIDs[i]);
-			attackRolls.evades[defenderIDs[i]] = undefined;
-			continue; //Skip this monster. Possibly add a nag screen for the player?
-		}
-		// log("PTU-CAR~ evade: " + evade);
-		attackRolls.evades[defenderIDs[i]] = evade;
-
-		// This is a good time to parse any macro syntax out of the various text blocks.
-		attackRolls.attack.flavorText = MacroReplace.selectedCharacter(attackRolls.attack.flavorText, defenderIDs[i]);
-		attackRolls.attack.effectText = MacroReplace.selectedCharacter(attackRolls.attack.effectText, defenderIDs[i]);
-		attackRolls.attack.gmInfoText = MacroReplace.selectedCharacter(attackRolls.attack.gmInfoText, defenderIDs[i]);
-
 	}
+	else if(move.attackType == "special") {
+		// log("PTU-CAR: checking special evasion for " + defenderID);
+		evadeSpec = PTU_Get_Attr_Val_I(defenderID, "SpecEvade");
+		evade = Math.max(evadeSpec, evadeSpeed);
+	}
+	else {
+		// log("PTU-CAR: skipping for status move: " + defenderID);
+		attackRolls.evade = undefined;
+	}
+	// log("PTU-CAR~ evade: " + evade);
+	attackRolls.evade = evade;
+
+	// This is a good time to parse any macro syntax out of the various text blocks.
+	attackRolls.attack.flavorText = MacroReplace.selectedCharacter(attackRolls.attack.flavorText, attackerID, defenderID);
+	attackRolls.attack.effectText = MacroReplace.selectedCharacter(attackRolls.attack.effectText, attackerID, defenderID);
+	attackRolls.attack.gmInfoText = MacroReplace.selectedCharacter(attackRolls.attack.gmInfoText, attackerID, defenderID);
+
+	
 	return attackRolls;
 
 
@@ -713,19 +711,25 @@ function PTU_Process_Attack_Roll(msg) {
 		return;
 	}
 
-	
+	var cmdLine = msg.content.split("|");
 
-	var defenderIDs = [];
-	for(var ii = 0; ii < msg.selected.length; ii++) {
-		var selGfxs = msg.selected;
-		// log("PTU-PAR gfx id: " + selGfxs[ii]._id);
-		var oGfx = getObj("graphic", selGfxs[ii]._id);
-		// log("PTU-PAR oGfx: " + JSON.stringify(oGfx));
-		defenderIDs[ii] = oGfx.get('represents');
+	log("PTU-PAR cmdLine: " + JSON.stringify(cmdLine));
+
+	var defenders = findObjs({
+		_type: "character",
+		name: cmdLine[2]
+	});
+
+	log("PTU-PAR: defenders: " + JSON.stringify(defenders));
+
+	var defenderID= "";
+
+	for(var defI = 0; defI < defenders.length; defI++) {
+		defenderID = defenders[0].get('_id');
 	}
 
+	log("PTU-PAR: defenderID: " + defenderID);
 
-	var cmdLine = msg.content.split("|");
 
 	// log("moveName: " + cmdLine[1]);
 	// log("PTU-PAR attackerIDs: " + JSON.stringify(attackerIDs));
@@ -740,40 +744,37 @@ function PTU_Process_Attack_Roll(msg) {
 	// log("PTU-PAR aID: " + aID);
 
 	// The only argument to ~attack is #1 = move name
-	var attackRolls = PTU_Calc_Attack_Rolls(aID ,defenderIDs, cmdLine[1]);
+	var attackRolls = PTU_Calc_Attack_Rolls(aID ,defenderID, cmdLine[1]);
 	var move = attackRolls.attack;
 
 	// log("PTU-PAR attackRolls.evades: " + JSON.stringify(attackRolls.evades));
 
-
-	for(var defenderID in attackRolls.evades) {
-		if (attackRolls.evades.hasOwnProperty(defenderID)) {
-			var numAttackRolls = move.multiHit;
-			if (attackRolls.attack.attackMultiHit == 5) {
-				// The crazy 1d8 stuff takes place during the damage calculations
-				// But we only roll 1 attack roll for all 5 attacks
-				numAttackRolls = 1;
-			}
-			else
-			{
-				var rollStr = "/roll ";
-				// log("PTU-PAR move: " + JSON.stringify(move));
-				rollStr += numAttackRolls + "d20";
-				// log("PTU-PAR: rollStr: " + rollStr);
-				sendChat(msg.who, rollStr, function(ops) {
-					// log("PTU-PAR: about to call ChAR, aID = " + aID);
-					PTU_Check_Attack_Roll(ops[0], attackRolls, aID, defenderID);
-				});
-			}
-		}		
+		
+	var numAttackRolls = move.multiHit;
+	if (attackRolls.attack.attackMultiHit == 5) {
+		// The crazy 1d8 stuff takes place during the damage calculations
+		// But we only roll 1 attack roll for all 5 attacks
+		numAttackRolls = 1;
 	}
+	else
+	{
+		var rollStr = "/roll ";
+		// log("PTU-PAR move: " + JSON.stringify(move));
+		rollStr += numAttackRolls + "d20";
+		// log("PTU-PAR: rollStr: " + rollStr);
+		sendChat(msg.who, rollStr, function(ops) {
+			// log("PTU-PAR: about to call ChAR, aID = " + aID);
+			PTU_Check_Attack_Roll(ops[0], attackRolls, aID, defenderID);
+		});
+	}
+
 }
 
 
 function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) {
 	// log("PTU-ChAR rollResult: " + JSON.stringify(rollResult));
 	// log("PTU-ChAR attackRolls: " + JSON.stringify(attackRolls));
-	// log("PTU-ChAR defenderID: " + defenderID);
+	 log("PTU-ChAR defenderID: " + defenderID);
 
 	var rr = JSON.parse(rollResult.content);
 	// log("PTU-ChAR rolls content: " + JSON.stringify(rr));		// lol
@@ -789,7 +790,7 @@ function PTU_Check_Attack_Roll(rollResult, attackRolls, attackerID, defenderID) 
 
 	var damageBase = attackRolls.attack.damageBase;
 
-	var goal = attackRolls.attack.AC + attackRolls.evades[defenderID];
+	var goal = attackRolls.attack.AC + attackRolls.evade;
 
 
 	if(attackRolls.attack.multiHit == 5) {
@@ -983,6 +984,18 @@ function PTU_Init_All_Characters() {
 	sendChat("Game Rules Engine", "/w gm DONE initializing all characters.");
 }
 
+function PTU_Init_Name(name) {
+	var allChars = findObjs({
+		_type: "character",
+		archived: false,
+		name: name
+	});
+	if(allChars.length > 0) {
+		PTU_Init_Character(allChars[0]);
+	}
+	
+}
+
 
 on("chat:message", function(msg) {
   if(msg.type == "api" && msg.content.indexOf("~attack") !== -1) {
@@ -990,6 +1003,9 @@ on("chat:message", function(msg) {
   }
   else if(msg.type == "api" && msg.content.indexOf("~initAll") !== -1)  {
   	PTU_Init_All_Characters();
+  }
+  else if(msg.type == "api" && msg.content.indexOf("~initName") !== -1)  {
+  	PTU_Init_Name(msg.content.split("|")[1]);
   }
 });
 
